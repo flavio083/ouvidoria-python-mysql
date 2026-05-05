@@ -2,130 +2,474 @@
 
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/)
 [![MySQL](https://img.shields.io/badge/mysql-8.0%2B-orange)](https://www.mysql.com/)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Status](https://img.shields.io/badge/status-Active-success)](https://github.com/flavio083/ouvidoriaintegrabd)
 
-A robust and modular **Complaint Management System** built in Python with MySQL database integration. This project demonstrates professional backend development practices with clean architecture, separation of concerns, and comprehensive database operations handling.
+A Python-based **Complaint Management System** with MySQL database integration. This project implements CRUD operations for managing complaints with a command-line interface and modular database abstraction layer.
 
 ## 📋 Table of Contents
 
-- [Features](#-features)
+- [Project Overview](#-project-overview)
+- [Database Schema](#-database-schema)
 - [Project Architecture](#-project-architecture)
-- [Folder Structure](#-folder-structure)
+- [File Structure & Modules](#-file-structure--modules)
+- [Core Modules](#-core-modules)
 - [Technologies](#-technologies)
-- [Installation Guide](#-installation-guide)
-- [Configuration Guide](#-configuration-guide)
+- [Installation](#-installation)
+- [Configuration](#-configuration)
 - [Database Setup](#-database-setup)
 - [How to Run](#-how-to-run)
 - [Usage Examples](#-usage-examples)
-- [API Operations](#-api-operations)
-- [Security Features](#-security-features)
-- [Future Improvements](#-future-improvements)
+- [Module Documentation](#-module-documentation)
+- [Code Structure Details](#-code-structure-details)
 - [Author](#-author)
-- [License](#-license)
 
-## ✨ Features
+## 📖 Project Overview
 
-### Core Functionalities
+**Ouvidoria BDGIT** is a complaint/feedback management system designed for the UNIFACISA Ombudsman's Office. The system allows users to:
 
-- ✅ **Create Complaints** - Register new complaints with automatic ID assignment
-- ✅ **List All Complaints** - Display all complaints with ID and description
-- ✅ **Search Complaints** - Find specific complaints by complaint code
-- ✅ **Update Complaints** - Modify existing complaint descriptions
-- ✅ **Delete Complaints** - Remove complaints from the system
-- ✅ **Count Complaints** - Display total number of registered complaints
+- **Register** new complaints via text input
+- **List** all registered complaints with ID and description
+- **Search** for specific complaints by complaint code
+- **Update** complaint descriptions
+- **Delete** complaints from the database
+- **Count** total number of registered complaints
 
-### Technical Highlights
+The project uses a **layered architecture** with separate modules for database operations, business logic, and user interface.
 
-- 🔐 **Prepared Statements** - SQL injection prevention with MySQL prepared statements
-- 🛡️ **Error Handling** - Comprehensive exception handling for database operations
-- 💾 **Transaction Management** - Rollback support for failed operations
-- 🏗️ **Modular Architecture** - Clean separation between UI, business logic, and database layers
-- 📝 **Logging & Feedback** - User-friendly console feedback for all operations
-- 🔌 **Connection Management** - Efficient database connection handling
+## 🗄️ Database Schema
 
-## 🏛️ Project Architecture
+### Table: `Reclamações`
 
-The project follows a **Three-Layer Architecture Pattern** for optimal code organization and maintainability:
-
-```
-┌─────────────────────────────────────┐
-│     Presentation Layer (UI)         │
-│  - menuv2.py (CLI Menu Interface)   │
-├─────────────────────────────────────┤
-│    Business Logic Layer             │
-│  - backend.py (Operations Handler)  │
-├─────────────────────────────────────┤
-│    Data Access Layer (Database)     │
-│  - operacoesbd.py (DB Operations)   │
-├─────────────────────────────────────┤
-│    Configuration Layer              │
-│  - config.py (Connection Settings)  │
-└─────────────────────────────────────┘
+```sql
+CREATE TABLE Reclamações (
+    codigo INT PRIMARY KEY AUTO_INCREMENT,
+    reclamacao TEXT NOT NULL
+);
 ```
 
-### Layer Responsibilities
+| Column | Type | Constraints |
+|--------|------|------------|
+| `codigo` | INT | PRIMARY KEY, AUTO_INCREMENT |
+| `reclamacao` | TEXT | NOT NULL |
 
-| Layer | Files | Responsibility |
-|-------|-------|-----------------|
-| **UI** | `menuv2.py` | User interaction, menu display, input handling |
-| **Business Logic** | `backend.py` | Core complaint operations coordination |
-| **Database** | `operacoesbd.py` | SQL execution, connection management, CRUD operations |
-| **Config** | `config_exemplo.py`, `config.py` | Database credentials and connection parameters |
+**Current Table Name**: `Reclamações` (with accent)  
+**Database Name**: `ouvidoriabd`
 
-## 📁 Folder Structure
+---
+
+## 🏗️ Project Architecture
+
+```
+┌────────────────────────────────────┐
+│  Presentation Layer (CLI)          │
+│  - menuv2.py (Main menu)           │
+│  - menu.py (Alternative menu)      │
+│  - Standalone scripts              │
+├────────────────────────────────────┤
+│  Backend/Business Logic            │
+│  - backend.py (6 business functions) │
+├────────────────────────────────────┤
+│  Data Access Layer (Database)      │
+│  - operacoesbd.py (6 DB functions) │
+├────────────────────────────────────┤
+│  Configuration                     │
+│  - config.py (MySQL connection)    │
+│  - config_exemplo.py (template)    │
+└────────────────────────────────────┘
+```
+
+### Architecture Notes
+
+⚠️ **Current Implementation Pattern**:
+- `menuv2.py` implements logic **inline** (does not call `backend.py` functions)
+- `menu.py` also implements logic **inline**
+- `backend.py` contains abstracted functions but is **not called** by the main menu
+- Standalone scripts directly import `operacoesbd.py` and repeat connection/logic code
+
+---
+
+## 📁 File Structure & Modules
 
 ```
 OuvidoriaBDGIT/
-├── 📄 README.md                    # Project documentation (this file)
-├── 📄 requirements.txt             # Python dependencies
-├── 📄 config_exemplo.py            # Configuration template
-├── 📄 config.py                    # Actual configuration (git-ignored)
-├── 📄 menuv2.py                    # Main CLI menu interface ⭐
-├── 📄 menu.py                      # Alternative menu version
-├── 📄 main.py                      # Application entry point
-├── 📄 backend.py                   # Business logic layer
-├── 📄 operacoesbd.py               # Database operations layer
-├── 📄 adicionar.py                 # Create complaint (standalone)
-├── 📄 listar.py                    # List complaints (standalone)
-├── 📄 pesquisar.py                 # Search complaint (standalone)
-├── 📄 remover.py                   # Delete complaint (standalone)
-├── 📄 substituir.py                # Update complaint (standalone)
-├── 📄 quantidade.py                # Count complaints (standalone)
-└── 📄 .gitignore                   # Git ignore rules
+├── operacoesbd.py              # Database abstraction layer ⭐
+├── backend.py                  # Business logic functions (not used by menus)
+├── menuv2.py                   # Main interactive menu (RECOMMENDED)
+├── menu.py                     # Alternative menu version
+├── main.py                     # Template file (connection only)
+├── adicionar.py                # Standalone: Create complaint
+├── listar.py                   # Standalone: List complaints
+├── pesquisar.py                # Standalone: Search complaint
+├── substituir.py               # Standalone: Update complaint
+├── remover.py                  # Standalone: Delete complaint
+├── quantidade.py               # Standalone: Count complaints
+├── config_exemplo.py           # Configuration template (example)
+├── config.py                   # Configuration (actual credentials - NOT in git)
+└── requirements.txt            # Python dependencies
 ```
+
+---
+
+## ⚙️ Core Modules
+
+### 1. **operacoesbd.py** - Data Access Layer
+
+**Purpose**: Database abstraction with prepared statements and error handling
+
+**Imports**:
+```python
+import mysql.connector
+```
+
+**Functions**:
+
+#### `criarConexao(endereco, usuario, senha, bancodedados, porta)`
+Creates MySQL connection with error handling.
+- **Parameters**: Host, username, password, database name, port
+- **Returns**: Connection object or `None` if error
+- **Error Handling**: Catches `mysql.connector.Error`
+
+```python
+conexao = criarConexao("localhost", "root", "password", "ouvidoriabd", 3306)
+```
+
+---
+
+#### `encerrarConexao(connection)`
+Safely closes database connection.
+- **Parameters**: Connection object
+- **Returns**: None
+
+```python
+encerrarConexao(conexao)
+```
+
+---
+
+#### `insertNoBancoDados(connection, sql, dados)`
+Inserts data with prepared statements and transaction support.
+- **Parameters**:
+  - `connection`: Active connection
+  - `sql`: SQL with `%s` placeholders
+  - `dados`: List of values to insert
+- **Returns**: Last inserted row ID or `None` on error
+- **Features**: Prepared statements, AUTO_COMMIT, ROLLBACK on error
+
+```python
+sql = 'insert into Reclamações (reclamacao) values (%s)'
+dados = ['Nova reclamação']
+novo_id = insertNoBancoDados(conexao, sql, dados)
+```
+
+---
+
+#### `listarBancoDados(connection, sql, params=None)`
+Retrieves data from database with optional parameters.
+- **Parameters**:
+  - `connection`: Active connection
+  - `sql`: SELECT query
+  - `params`: Optional list of parameters for WHERE clause
+- **Returns**: List of tuples (results) or empty list on error
+- **Features**: Prepared statements, supports parameterized queries
+
+```python
+# Without parameters
+todos = listarBancoDados(conexao, 'select * from Reclamações')
+
+# With parameters
+sql = 'select * from Reclamações where codigo = %s'
+resultado = listarBancoDados(conexao, sql, [1])
+```
+
+---
+
+#### `atualizarBancoDados(connection, sql, dados)`
+Updates records with transaction management.
+- **Parameters**:
+  - `connection`: Active connection
+  - `sql`: UPDATE query with placeholders
+  - `dados`: Values to update
+- **Returns**: Number of affected rows (0 if no match)
+- **Features**: Prepared statements, ROLLBACK on error
+
+```python
+sql = 'UPDATE Reclamações SET reclamacao = %s WHERE codigo = %s'
+dados = ['Reclamação atualizada', 1]
+linhas = atualizarBancoDados(conexao, sql, dados)
+```
+
+---
+
+#### `excluirBancoDados(connection, sql, dados)`
+Deletes records with error handling and rollback.
+- **Parameters**:
+  - `connection`: Active connection
+  - `sql`: DELETE query with placeholders
+  - `dados`: Values to identify records
+- **Returns**: Number of deleted rows (0 if no match)
+- **Features**: Prepared statements, ROLLBACK on error
+
+```python
+sql = 'delete from Reclamações where codigo = %s'
+dados = [1]
+deletados = excluirBancoDados(conexao, sql, dados)
+```
+
+---
+
+### 2. **backend.py** - Business Logic Layer
+
+**Purpose**: High-level complaint operations (abstracted functions)
+
+**Imports**:
+```python
+from operacoesbd import *  # Imports all 6 database functions
+```
+
+**⚠️ NOTE**: These functions are defined but **NOT CALLED** by `menuv2.py` or `menu.py`. They are available for import but the current menus implement logic inline.
+
+**Functions**:
+
+#### `listarReclamacoes(conexao)`
+Lists all complaints.
+- **Input**: Connection object
+- **Output**: Prints formatted list or "Nenhuma reclamação foi encontrada"
+
+```python
+from backend import *
+listarReclamacoes(conexao)
+```
+
+---
+
+#### `novaReclamacao(conexao)`
+Creates new complaint.
+- **Input**: Connection object (prompts user for complaint text)
+- **Output**: Success message with new complaint ID or error message
+
+---
+
+#### `pesquisarReclamacao(conexao)`
+Searches for complaint by code.
+- **Input**: Connection object (prompts user for complaint code)
+- **Output**: Complaint text if found or error message
+
+---
+
+#### `substituirReclamacao(conexao)`
+Updates complaint description.
+- **Input**: Connection object (prompts user for code and new description)
+- **Output**: Success message or error message
+
+---
+
+#### `removerReclamacao(conexao)`
+Deletes complaint by code.
+- **Input**: Connection object (prompts user for complaint code)
+- **Output**: Success message or error message
+
+---
+
+#### `quantidadeReclamacao(conexao)`
+Displays total complaint count.
+- **Input**: Connection object
+- **Output**: Formatted message with complaint count
+
+---
+
+### 3. **menuv2.py** - Main Interactive Menu (RECOMMENDED)
+
+**Purpose**: Primary user interface for complaint management
+
+**Imports**:
+```python
+from backend import *  # Imports database functions
+```
+
+**Connection Details** (Hardcoded):
+```python
+conexao = criarConexao("localhost", "root", "Futebol06!", "ouvidoriabd", 3306)
+```
+
+**Menu Structure**:
+- Displays 7 menu options in a loop
+- Continues until user selects option 7 (exit)
+- Each option implements logic **inline** instead of calling `backend.py` functions
+
+**Menu Options**:
+
+| Option | Operation | SQL Query |
+|--------|-----------|-----------|
+| 1 | List all complaints | `select * from Reclamações` |
+| 2 | Register new complaint | `insert into Reclamações (reclamacao) values (%s)` |
+| 3 | Search by code | `select * from Reclamações where codigo = %s` |
+| 4 | Update complaint | `UPDATE Reclamações SET reclamacao = %s WHERE codigo = %s` |
+| 5 | Delete complaint | `delete from Reclamações where codigo = %s` |
+| 6 | Count total | `select count(*) from Reclamações` |
+| 7 | Exit | `encerrarConexao(conexao)` |
+
+---
+
+### 4. **menu.py** - Alternative Menu
+
+**Purpose**: Alternative interactive menu (similar to `menuv2.py`)
+
+**Imports**:
+```python
+from operacoesbd import *
+```
+
+**Connection Details** (Hardcoded):
+```python
+conexao = criarConexao("localhost", "root", "Futebol06!", "ouvidoriabd", 3306)
+```
+
+**Implementation**: Follows same pattern as `menuv2.py` with inline logic
+
+---
+
+### 5. **Standalone Scripts**
+
+Each script is independent, creates own connection, performs one operation, then closes connection.
+
+#### **adicionar.py** - Add Complaint
+```python
+from operacoesbd import *
+conexao = criarConexao("localhost", "root", "Futebol06!", "ouvidoriabd", 3306)
+# Prompts for complaint text
+# Inserts into database
+# Closes connection
+```
+
+---
+
+#### **listar.py** - List Complaints
+```python
+from operacoesbd import *
+conexao = criarConexao("localhost", "root", "Futebol06!", "ouvidoriabd", 3306)
+# Retrieves all complaints
+# Prints list
+# Closes connection
+```
+
+---
+
+#### **pesquisar.py** - Search Complaint
+```python
+from operacoesbd import *
+conexao = criarConexao("localhost", "root", "Futebol06!", "ouvidoriabd", 3306)
+# Prompts for complaint code
+# Retrieves matching complaint
+# Prints result
+# Closes connection
+```
+
+---
+
+#### **substituir.py** - Update Complaint
+```python
+from operacoesbd import *
+conexao = criarConexao("localhost", "root", "Futebol06!", "ouvidoriabd", 3306)
+# Prompts for code and new description
+# Updates database
+# Prints result
+# Closes connection
+```
+
+---
+
+#### **remover.py** - Delete Complaint
+```python
+from operacoesbd import *
+conexao = criarConexao("localhost", "root", "Futebol06!", "ouvidoriabd", 3306)
+# Prompts for complaint code
+# Deletes from database
+# Prints result
+# Closes connection
+```
+
+---
+
+#### **quantidade.py** - Count Complaints
+```python
+from operacoesbd import *
+conexao = criarConexao("localhost", "root", "Futebol06!", "ouvidoriabd", 3306)
+# Counts total complaints
+# Prints count
+# Closes connection
+```
+
+---
+
+### 6. **main.py** - Template File
+
+**Purpose**: Template/starter file
+
+**Content**:
+```python
+from operacoesbd import *
+
+conexao = criarConexao("localhost", "root", "Futebol06!", "ouvidoriabd", 3306)
+# uso da conexao
+encerrarConexao(conexao)
+```
+
+**Status**: Contains only connection setup, no actual operations
+
+---
+
+### 7. **config.py** - Actual Configuration
+
+**Content** (Hardcoded credentials):
+```python
+HOST = "localhost"
+USER = "root"
+PASSWORD = "Futebol06!"
+DATABASE = "ouvidoriabd"
+PORT = 3306
+```
+
+**Note**: Not currently used by any module (credentials are hardcoded directly in files)
+
+---
+
+### 8. **config_exemplo.py** - Configuration Template
+
+**Purpose**: Template for configuration
+
+**Content**:
+```python
+HOST = "localhost"
+USER = "root"
+PASSWORD = "your_password_here"
+DATABASE = "ouvidoriabd"
+PORT = 3306
+```
+
+---
 
 ## 🛠️ Technologies
 
-### Backend Stack
+| Technology | Version | Usage |
+|-----------|---------|-------|
+| Python | 3.8+ | Core language |
+| MySQL | 8.0+ | Database |
+| mysql-connector-python | 8.0+ | Python-MySQL driver |
 
-| Technology | Version | Purpose |
-|-----------|---------|---------|
-| **Python** | 3.8+ | Core programming language |
-| **MySQL** | 8.0+ | Relational database |
-| **mysql-connector-python** | 8.0+ | Python-MySQL driver |
+**Python Imports Used**:
+- `mysql.connector` - MySQL database connection
 
-### Key Libraries
+---
 
-```
-mysql-connector-python==8.0.33
-```
-
-### Development Tools
-
-- **IDE**: PyCharm / VS Code
-- **Version Control**: Git / GitHub
-- **Package Manager**: pip
-
-## 📦 Installation Guide
+## 📦 Installation
 
 ### Prerequisites
 
-- **Python 3.8+** installed on your system
-- **MySQL Server 8.0+** installed and running
-- **pip** package manager
+- Python 3.8+
+- MySQL Server 8.0+
+- pip package manager
 
-### Step 1: Clone the Repository
+### Step 1: Clone Repository
 
 ```bash
 git clone https://github.com/flavio083/ouvidoriaintegrabd.git
@@ -134,13 +478,13 @@ cd OuvidoriaBDGIT
 
 ### Step 2: Create Virtual Environment
 
-**On Windows:**
+**Windows**:
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 ```
 
-**On macOS/Linux:**
+**macOS/Linux**:
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
@@ -152,105 +496,91 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Expected output:
+**requirements.txt contents**:
 ```
-Successfully installed mysql-connector-python-8.0.33
+mysql-connector-python==8.0.33
 ```
 
 ### Step 4: Verify Installation
 
 ```bash
-python -c "import mysql.connector; print('MySQL Connector installed successfully!')"
+python -c "import mysql.connector; print('MySQL Connector installed')"
 ```
 
-## ⚙️ Configuration Guide
+---
 
-### Step 1: Copy Configuration Template
+## ⚙️ Configuration
 
-```bash
-cp config_exemplo.py config.py
-```
+### Current State
 
-### Step 2: Edit config.py
+⚠️ **Credentials are HARDCODED in source files**:
+- `menuv2.py`: `criarConexao("localhost","root","Futebol06!","ouvidoriabd",3306)`
+- `menu.py`: Same credentials
+- All standalone scripts: Same credentials
+- `config.py` and `config_exemplo.py` exist but are NOT USED
 
-Open `config.py` and update with your MySQL credentials:
+### Recommended Configuration Approach
 
-```python
-# config.py
-HOST = "localhost"           # MySQL host address
-USER = "root"                # MySQL username
-PASSWORD = "your_password"   # Your MySQL password
-DATABASE = "ouvidoriabd"     # Database name
-PORT = 3306                  # MySQL port (default: 3306)
-```
+1. **Copy template** (optional):
+   ```bash
+   cp config_exemplo.py config.py
+   ```
 
-### Configuration Template Reference
+2. **Update credentials** in one central place (pending refactoring)
 
-**config_exemplo.py** (DO NOT EDIT):
-```python
-HOST = "localhost"
-USER = "root"
-PASSWORD = "your_password_here"
-DATABASE = "ouvidoriabd"
-PORT = 3306
-```
+3. **Import from config** instead of hardcoding:
+   ```python
+   from config import HOST, USER, PASSWORD, DATABASE, PORT
+   conexao = criarConexao(HOST, USER, PASSWORD, DATABASE, PORT)
+   ```
 
-### Important Security Notes
-
-⚠️ **NEVER commit actual credentials to version control!**
-
-- Add `config.py` to `.gitignore`
-- Always use `config_exemplo.py` as a template
-- Use environment variables for production deployments
+---
 
 ## 🗄️ Database Setup
 
 ### Step 1: Create Database
 
-Connect to MySQL and execute:
-
 ```sql
-CREATE DATABASE ouvidoriabd CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE ouvidoriabd CHARACTER SET utf8mb4;
 ```
 
-### Step 2: Create Complaints Table
+### Step 2: Create Table
 
 ```sql
 USE ouvidoriabd;
 
 CREATE TABLE Reclamações (
     codigo INT PRIMARY KEY AUTO_INCREMENT,
-    reclamacao TEXT NOT NULL,
-    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    reclamacao TEXT NOT NULL
 );
 ```
 
-### Step 3: Insert Sample Data (Optional)
+### Step 3: Sample Data (Optional)
 
 ```sql
 INSERT INTO Reclamações (reclamacao) VALUES 
-('Email server issues'),
-('System running slow'),
-('Missing documentation');
+('Problema com servidor de email'),
+('Sistema lento demais'),
+('Falta de documentação');
 ```
 
-### Step 4: Verify Connection
+### Step 4: Verify
 
-Run the application to test database connectivity:
-
-```bash
-python menuv2.py
+```sql
+SELECT * FROM Reclamações;
 ```
+
+---
 
 ## 🚀 How to Run
 
-### Running the Interactive Menu (Recommended)
+### Option 1: Main Interactive Menu (RECOMMENDED)
 
 ```bash
 python menuv2.py
 ```
 
-**Expected Output:**
+**Output**:
 ```
 Olá, tudo bem?
 Venho aqui desejar as boas vindas á Ouvidoria Unifacisa!
@@ -266,59 +596,65 @@ Venho aqui desejar as boas vindas á Ouvidoria Unifacisa!
 Digite sua opção: 
 ```
 
-### Running Standalone Modules
-
-Each operation can also be run individually:
+### Option 2: Alternative Menu
 
 ```bash
-python listar.py      # List all complaints
-python adicionar.py   # Add new complaint
-python pesquisar.py   # Search complaint
-python substituir.py  # Update complaint
-python remover.py     # Delete complaint
-python quantidade.py  # Count complaints
+python menu.py
 ```
+
+### Option 3: Standalone Scripts
+
+```bash
+python listar.py        # List all complaints
+python adicionar.py     # Add new complaint
+python pesquisar.py     # Search complaint
+python substituir.py    # Update complaint
+python remover.py       # Delete complaint
+python quantidade.py    # Count complaints
+```
+
+---
 
 ## 📖 Usage Examples
 
-### Example 1: Interactive Menu Session
+### Example 1: List All Complaints
 
 ```
 Digite sua opção: 1
 
 -- Lista de Reclamações --
-1 - Email server issues
-2 - System running slow
-3 - Missing documentation
+1 - Problema com servidor de email
+2 - Sistema lento demais
+3 - Falta de documentação
 ```
 
-### Example 2: Adding a New Complaint
+### Example 2: Add New Complaint
 
 ```
 Digite sua opção: 2
-Insira sua reclamação: Air conditioning not working properly
+Insira sua reclamação: Ar condicionado não funciona
 Reclamação adicionada com sucesso! 
 O código é 4
 ```
 
-### Example 3: Searching for a Complaint
+### Example 3: Search Complaint
 
 ```
 Digite sua opção: 3
 Digite o código da Reclamação: 2
-A reclamação pesquisada foi: System running slow
+A reclamação pesquisada foi: Sistema lento demais
 ```
 
-### Example 4: Updating a Complaint
+### Example 4: Update Complaint
 
 ```
 Digite sua opção: 4
 Digite o código da reclamação a ser substituida: 2
-Digite a nova reclamação: System extremely slow - CRITICAL
+Digite a nova reclamação: Sistema crítico - EXTREMAMENTE lento
 Reclamação substituida com sucesso!
 ```
 
-### Example 5: Deleting a Complaint
+### Example 5: Delete Complaint
 
 ```
 Digite sua opção: 5
@@ -326,160 +662,127 @@ Digite o código da Reclamação a ser Removida: 2
 Reclamação removida com sucesso!
 ```
 
-### Example 6: Viewing Statistics
+### Example 6: View Count
 
 ```
 Digite sua opção: 6
 Atualmente temos 5 reclamações.
 ```
 
-## 🔧 API Operations
+---
 
-### Database Operations Module (`operacoesbd.py`)
+## 📚 Module Documentation
 
-The `operacoesbd.py` module provides the **data access layer** with six core functions for CRUD operations:
+### Database Layer (`operacoesbd.py`)
 
-#### 1. **criarConexao()** - Create Connection
-
+**Error Handling Pattern**:
 ```python
-conexao = criarConexao(host, user, password, database, port)
+try:
+    cursor = connection.cursor(prepared=True)
+    cursor.execute(sql, dados)
+    connection.commit()
+    # ... return results
+except mysql.connector.Error as err:
+    print(f"Erro ao [operation]: {err}")
+    connection.rollback()  # Transaction rollback on error
+    # ... return default value
+finally:
+    cursor.close()  # Always close cursor
 ```
 
-Establishes connection with MySQL database with error handling.
+**Key Features**:
+- ✅ Prepared statements (`prepared=True`) - prevents SQL injection
+- ✅ Transaction management (`commit()`, `rollback()`)
+- ✅ Error handling (`mysql.connector.Error`)
+- ✅ Resource cleanup (`cursor.close()`)
 
-#### 2. **encerrarConexao()** - Close Connection
+---
+
+### SQL Queries Used
+
+| Operation | Query |
+|-----------|-------|
+| Create | `insert into Reclamações (reclamacao) values (%s)` |
+| Read All | `select * from Reclamações` |
+| Read One | `select * from Reclamações where codigo = %s` |
+| Update | `UPDATE Reclamações SET reclamacao = %s WHERE codigo = %s` |
+| Delete | `delete from Reclamações where codigo = %s` |
+| Count | `select count(*) from Reclamações` |
+
+---
+
+## 🔍 Code Structure Details
+
+### Import Pattern
+
+**All files use**:
+```python
+from operacoesbd import *
+```
+
+This imports all 6 database functions globally.
+
+---
+
+### Connection Pattern
+
+**All files use** (hardcoded):
+```python
+conexao = criarConexao("localhost", "root", "Futebol06!", "ouvidoriabd", 3306)
+```
+
+---
+
+### Menu Loop Pattern (menuv2.py/menu.py)
 
 ```python
+opcao = 1
+while opcao != 7:
+    # Display menu
+    print(menu_options)
+    
+    # Get user input
+    opcao = int(input("Digite sua opção: "))
+    
+    # Execute corresponding operation
+    if opcao == 1:
+        # Inline logic for list
+    elif opcao == 2:
+        # Inline logic for create
+    # ... etc
+    
+# Close connection after loop
 encerrarConexao(conexao)
 ```
 
-Safely closes database connection.
+---
 
-#### 3. **insertNoBancoDados()** - Insert Records
-
-```python
-novo_id = insertNoBancoDados(conexao, sql_query, dados)
-```
-
-Insert data with prepared statements and transaction support.
-
-#### 4. **listarBancoDados()** - Read Records
+### Standalone Script Pattern
 
 ```python
-resultados = listarBancoDados(conexao, sql_query, parametros)
+from operacoesbd import *
+
+# Create connection
+conexao = criarConexao("localhost", "root", "Futebol06!", "ouvidoriabd", 3306)
+
+# Get user input
+user_input = input("Prompt: ")
+
+# Build query
+sql = "..."
+dados = [user_input]
+
+# Execute operation
+resultado = listarBancoDados(conexao, sql, dados)  # or insert/update/delete
+
+# Print results
+print(resultado)
+
+# Close connection
+encerrarConexao(conexao)
 ```
 
-Retrieve data with optional parameters.
-
-#### 5. **atualizarBancoDados()** - Update Records
-
-```python
-linhas_afetadas = atualizarBancoDados(conexao, sql_query, dados)
-```
-
-Update records with transaction management.
-
-#### 6. **excluirBancoDados()** - Delete Records
-
-```python
-linhas_deletadas = excluirBancoDados(conexao, sql_query, dados)
-```
-
-Delete records with error handling and rollback support.
-
-### Backend Layer (`backend.py`)
-
-```python
-from backend import *
-
-# High-level operations
-listarReclamacoes(conexao)           # List all complaints
-novaReclamacao(conexao)              # Register new complaint
-pesquisarReclamacao(conexao)         # Search complaint by code
-substituirReclamacao(conexao)        # Update complaint
-removerReclamacao(conexao)           # Delete complaint
-quantidadeReclamacao(conexao)        # Display total count
-```
-
-## 🔐 Security Features
-
-### Implemented
-
-- ✅ **Prepared Statements** - Protection against SQL injection
-- ✅ **Error Handling** - Graceful error management
-- ✅ **Transaction Rollback** - Data consistency on failures
-- ✅ **Connection Validation** - Safe connection handling
-
-### Recommended for Production
-
-- 🔒 Use environment variables for credentials
-- 🔒 Implement authentication and authorization
-- 🔒 Add input validation and sanitization
-- 🔒 Enable MySQL SSL connections
-- 🔒 Implement audit logging
-- 🔒 Rate limiting for API endpoints
-
-## 📈 Future Improvements
-
-### Phase 2 - Enhanced Features
-- [ ] Web API REST endpoints (Flask/FastAPI)
-- [ ] Web-based dashboard interface
-- [ ] User authentication system
-- [ ] Role-based access control (RBAC)
-- [ ] Complaint categories and tagging
-
-### Phase 3 - Advanced Functionality
-- [ ] Email notifications for complaint updates
-- [ ] File attachment support
-- [ ] Comment threads on complaints
-- [ ] SLA tracking and management
-- [ ] Advanced search and filtering
-- [ ] Data export (CSV/PDF)
-
-### Phase 4 - DevOps & Scalability
-- [ ] Docker containerization
-- [ ] CI/CD pipeline (GitHub Actions)
-- [ ] Database migration scripts
-- [ ] Performance optimization
-- [ ] Database replication
-- [ ] Redis caching layer
-
-### Phase 5 - Quality & Testing
-- [ ] Unit tests (pytest)
-- [ ] Integration tests
-- [ ] API documentation (Swagger/OpenAPI)
-- [ ] Code coverage reporting
-- [ ] Load testing
-
-## 💡 Architecture Highlights
-
-### Design Patterns Used
-
-1. **Separation of Concerns** - Clear layer separation for UI, business logic, and data access
-2. **CRUD Pattern** - Standard Create, Read, Update, Delete operations
-3. **Error Handling Pattern** - Try-catch blocks with graceful error recovery
-4. **Connection Management** - Efficient resource handling
-
-### Best Practices Implemented
-
-✓ Prepared statements for SQL injection prevention  
-✓ Transaction management with rollback capability  
-✓ Resource cleanup with proper connection closure  
-✓ Meaningful error messages for debugging  
-✓ Modular code structure for maintainability  
-✓ Configuration externalization  
-
-## 🤝 Contributing
-
-This is an internship project demonstrating professional Python backend development. Feel free to fork, study, and build upon this codebase.
-
-### Development Workflow
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+---
 
 ## 👨‍💻 Author
 
@@ -487,58 +790,39 @@ This is an internship project demonstrating professional Python backend developm
 
 - GitHub: [@flavio083](https://github.com/flavio083)
 - Repository: [ouvidoriaintegrabd](https://github.com/flavio083/ouvidoriaintegrabd)
-- Institution: Universidade Federal de Campina Grande (UNIFACISA)
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 📞 Support & Contact
-
-- 📧 For questions or issues, open a GitHub Issue
-- 💬 GitHub Discussions for feature requests
-- 🐛 Bug reports can be submitted via Issues
-
-## 🎓 Learning Resources
-
-This project demonstrates:
-
-- Python backend development best practices
-- Database design and SQL operations
-- Python MySQL integration
-- CLI application development
-- Modular architecture patterns
-- Error handling and exception management
-- Configuration management
-- Git version control workflows
-
-## 🚀 Quick Start Summary
-
-```bash
-# Clone repository
-git clone https://github.com/flavio083/ouvidoriaintegrabd.git
-cd OuvidoriaBDGIT
-
-# Setup virtual environment
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Configure database
-cp config_exemplo.py config.py
-# Edit config.py with your MySQL credentials
-
-# Run application
-python menuv2.py
-```
 
 ---
 
-**Made with ❤️ for backend development excellence**
+## 📝 Notes & Observations
 
-⭐ If this project helped you, please consider giving it a star!
+### Current Implementation Status
+
+✅ **What Works**:
+- Database abstraction layer (`operacoesbd.py`)
+- All CRUD operations functional
+- Error handling and transaction management
+- Interactive menu interface
+- Multiple entry points (menu vs standalone scripts)
+
+⚠️ **Areas for Improvement**:
+- Backend functions (`backend.py`) defined but not used by menus
+- Credentials hardcoded in all files (not externalized)
+- Code duplication across menu and standalone scripts
+- `config.py` defined but not imported by any module
+- `main.py` is only a template
+
+### Recommended Refactoring
+
+1. **Consolidate configuration**: Use `config.py` for all credentials
+2. **Use backend layer**: Have `menuv2.py` call `backend.py` functions instead of inline logic
+3. **DRY principle**: Remove duplicate connection code from standalone scripts
+4. **Secure credentials**: Move hardcoded passwords to environment variables
+5. **Error messages**: Add more specific error feedback to users
+
+---
+
+**Documentation generated from actual source code analysis**  
+Last updated: 2024
 4. **Cursor Management**: Fecha cursores após uso para liberar recursos
 5. **Parâmetros Seguros**: Dados separados do SQL
 
