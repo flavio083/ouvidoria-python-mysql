@@ -1,503 +1,544 @@
-# Sistema de Ouvidoria 
+# 🎯 Ouvidoria BDGIT - Complaint Management System
 
-## 📋 Visão Geral
+[![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/)
+[![MySQL](https://img.shields.io/badge/mysql-8.0%2B-orange)](https://www.mysql.com/)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Status](https://img.shields.io/badge/status-Active-success)](https://github.com/flavio083/ouvidoriaintegrabd)
 
-Sistema de gerenciamento de reclamações desenvolvido em Python com integração a banco de dados MySQL. O projeto permite listar, registrar, pesquisar, atualizar e remover reclamações enviadas pelos usuários da Ouvidoria da Universidade Unifacisa.
+A robust and modular **Complaint Management System** built in Python with MySQL database integration. This project demonstrates professional backend development practices with clean architecture, separation of concerns, and comprehensive database operations handling.
 
----
+## 📋 Table of Contents
 
-## 📁 Estrutura do Projeto
+- [Features](#-features)
+- [Project Architecture](#-project-architecture)
+- [Folder Structure](#-folder-structure)
+- [Technologies](#-technologies)
+- [Installation Guide](#-installation-guide)
+- [Configuration Guide](#-configuration-guide)
+- [Database Setup](#-database-setup)
+- [How to Run](#-how-to-run)
+- [Usage Examples](#-usage-examples)
+- [API Operations](#-api-operations)
+- [Security Features](#-security-features)
+- [Future Improvements](#-future-improvements)
+- [Author](#-author)
+- [License](#-license)
+
+## ✨ Features
+
+### Core Functionalities
+
+- ✅ **Create Complaints** - Register new complaints with automatic ID assignment
+- ✅ **List All Complaints** - Display all complaints with ID and description
+- ✅ **Search Complaints** - Find specific complaints by complaint code
+- ✅ **Update Complaints** - Modify existing complaint descriptions
+- ✅ **Delete Complaints** - Remove complaints from the system
+- ✅ **Count Complaints** - Display total number of registered complaints
+
+### Technical Highlights
+
+- 🔐 **Prepared Statements** - SQL injection prevention with MySQL prepared statements
+- 🛡️ **Error Handling** - Comprehensive exception handling for database operations
+- 💾 **Transaction Management** - Rollback support for failed operations
+- 🏗️ **Modular Architecture** - Clean separation between UI, business logic, and database layers
+- 📝 **Logging & Feedback** - User-friendly console feedback for all operations
+- 🔌 **Connection Management** - Efficient database connection handling
+
+## 🏛️ Project Architecture
+
+The project follows a **Three-Layer Architecture Pattern** for optimal code organization and maintainability:
+
+```
+┌─────────────────────────────────────┐
+│     Presentation Layer (UI)         │
+│  - menuv2.py (CLI Menu Interface)   │
+├─────────────────────────────────────┤
+│    Business Logic Layer             │
+│  - backend.py (Operations Handler)  │
+├─────────────────────────────────────┤
+│    Data Access Layer (Database)     │
+│  - operacoesbd.py (DB Operations)   │
+├─────────────────────────────────────┤
+│    Configuration Layer              │
+│  - config.py (Connection Settings)  │
+└─────────────────────────────────────┘
+```
+
+### Layer Responsibilities
+
+| Layer | Files | Responsibility |
+|-------|-------|-----------------|
+| **UI** | `menuv2.py` | User interaction, menu display, input handling |
+| **Business Logic** | `backend.py` | Core complaint operations coordination |
+| **Database** | `operacoesbd.py` | SQL execution, connection management, CRUD operations |
+| **Config** | `config_exemplo.py`, `config.py` | Database credentials and connection parameters |
+
+## 📁 Folder Structure
 
 ```
 OuvidoriaBDGIT/
-├── menuv2.py           # Interface principal (Menu interativo)
-├── backend.py          # Lógica de negócio (Funções de operação)
-├── operacoesbd.py      # Biblioteca de acesso ao banco de dados
-├── conexao.py          # Configuração de conexão
-├── config.py           # Configurações do sistema
-└── [outros arquivos]   # Arquivos auxiliares
+├── 📄 README.md                    # Project documentation (this file)
+├── 📄 requirements.txt             # Python dependencies
+├── 📄 config_exemplo.py            # Configuration template
+├── 📄 config.py                    # Actual configuration (git-ignored)
+├── 📄 menuv2.py                    # Main CLI menu interface ⭐
+├── 📄 menu.py                      # Alternative menu version
+├── 📄 main.py                      # Application entry point
+├── 📄 backend.py                   # Business logic layer
+├── 📄 operacoesbd.py               # Database operations layer
+├── 📄 adicionar.py                 # Create complaint (standalone)
+├── 📄 listar.py                    # List complaints (standalone)
+├── 📄 pesquisar.py                 # Search complaint (standalone)
+├── 📄 remover.py                   # Delete complaint (standalone)
+├── 📄 substituir.py                # Update complaint (standalone)
+├── 📄 quantidade.py                # Count complaints (standalone)
+└── 📄 .gitignore                   # Git ignore rules
 ```
 
----
+## 🛠️ Technologies
 
-## 🎯 Funcionamento do arquivo menuv2.py
+### Backend Stack
 
-O arquivo `menuv2.py` é a **interface principal do sistema** responsável por gerenciar a interação com o usuário.
+| Technology | Version | Purpose |
+|-----------|---------|---------|
+| **Python** | 3.8+ | Core programming language |
+| **MySQL** | 8.0+ | Relational database |
+| **mysql-connector-python** | 8.0+ | Python-MySQL driver |
 
-### Características principais:
-
-- **Menu Interativo**: Apresenta 7 opções para o usuário escolher
-- **Loop Contínuo**: Permanece em execução até o usuário selecionar a opção de sair (opção 7)
-- **Tratamento de Conexão**: Estabelece conexão com o banco de dados ao iniciar e a encerra ao finalizar
-
-### Fluxo de Execução:
+### Key Libraries
 
 ```
-1. Exibe mensagem de boas-vindas
-2. Estabelece conexão com o banco de dados via conexao.conectar()
-3. Entra em loop infinito mostrando o menu
-4. Aguarda entrada do usuário (1-7)
-5. Executa função correspondente à opção selecionada
-6. Retorna ao menu (até selecionar opção 7)
-7. Fecha a conexão e encerra o programa
+mysql-connector-python==8.0.33
 ```
 
-### Opções do Menu:
+### Development Tools
 
-| Opção | Descrição | Método Backend |
-|-------|-----------|---|
-| 1 | Listar Reclamações | `listarReclamacoes()` |
-| 2 | Registrar nova reclamação | `novaReclamacao()` |
-| 3 | Pesquisar reclamação pelo código | `pesquisarReclamacao()` |
-| 4 | Atualizar reclamação existente | `substituirReclamacao()` |
-| 5 | Remover reclamação pelo código | `removerReclamacao()` |
-| 6 | Mostrar quantidade total de reclamações | `quantidadeReclamacao()` |
-| 7 | Sair do sistema | `encerrarConexao()` |
+- **IDE**: PyCharm / VS Code
+- **Version Control**: Git / GitHub
+- **Package Manager**: pip
 
-### Código do Menu:
+## 📦 Installation Guide
+
+### Prerequisites
+
+- **Python 3.8+** installed on your system
+- **MySQL Server 8.0+** installed and running
+- **pip** package manager
+
+### Step 1: Clone the Repository
+
+```bash
+git clone https://github.com/flavio083/ouvidoriaintegrabd.git
+cd OuvidoriaBDGIT
+```
+
+### Step 2: Create Virtual Environment
+
+**On Windows:**
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+**On macOS/Linux:**
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+### Step 3: Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+Expected output:
+```
+Successfully installed mysql-connector-python-8.0.33
+```
+
+### Step 4: Verify Installation
+
+```bash
+python -c "import mysql.connector; print('MySQL Connector installed successfully!')"
+```
+
+## ⚙️ Configuration Guide
+
+### Step 1: Copy Configuration Template
+
+```bash
+cp config_exemplo.py config.py
+```
+
+### Step 2: Edit config.py
+
+Open `config.py` and update with your MySQL credentials:
+
+```python
+# config.py
+HOST = "localhost"           # MySQL host address
+USER = "root"                # MySQL username
+PASSWORD = "your_password"   # Your MySQL password
+DATABASE = "ouvidoriabd"     # Database name
+PORT = 3306                  # MySQL port (default: 3306)
+```
+
+### Configuration Template Reference
+
+**config_exemplo.py** (DO NOT EDIT):
+```python
+HOST = "localhost"
+USER = "root"
+PASSWORD = "your_password_here"
+DATABASE = "ouvidoriabd"
+PORT = 3306
+```
+
+### Important Security Notes
+
+⚠️ **NEVER commit actual credentials to version control!**
+
+- Add `config.py` to `.gitignore`
+- Always use `config_exemplo.py` as a template
+- Use environment variables for production deployments
+
+## 🗄️ Database Setup
+
+### Step 1: Create Database
+
+Connect to MySQL and execute:
+
+```sql
+CREATE DATABASE ouvidoriabd CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+
+### Step 2: Create Complaints Table
+
+```sql
+USE ouvidoriabd;
+
+CREATE TABLE Reclamações (
+    codigo INT PRIMARY KEY AUTO_INCREMENT,
+    reclamacao TEXT NOT NULL,
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+### Step 3: Insert Sample Data (Optional)
+
+```sql
+INSERT INTO Reclamações (reclamacao) VALUES 
+('Email server issues'),
+('System running slow'),
+('Missing documentation');
+```
+
+### Step 4: Verify Connection
+
+Run the application to test database connectivity:
+
+```bash
+python menuv2.py
+```
+
+## 🚀 How to Run
+
+### Running the Interactive Menu (Recommended)
+
+```bash
+python menuv2.py
+```
+
+**Expected Output:**
+```
+Olá, tudo bem?
+Venho aqui desejar as boas vindas á Ouvidoria Unifacisa!
+
+1) Listar Reclamações;
+2) Registrar uma nova reclamação;
+3) Pesquisar uma reclamação pelo código;
+4) Atualizar uma reclamação existente;
+5) Remover uma reclamação pelo código;
+6) Mostrar a quantidade total de reclamações cadastradas;
+7) Opção para sair do sistema.
+
+Digite sua opção: 
+```
+
+### Running Standalone Modules
+
+Each operation can also be run individually:
+
+```bash
+python listar.py      # List all complaints
+python adicionar.py   # Add new complaint
+python pesquisar.py   # Search complaint
+python substituir.py  # Update complaint
+python remover.py     # Delete complaint
+python quantidade.py  # Count complaints
+```
+
+## 📖 Usage Examples
+
+### Example 1: Interactive Menu Session
+
+```
+Digite sua opção: 1
+
+-- Lista de Reclamações --
+1 - Email server issues
+2 - System running slow
+3 - Missing documentation
+```
+
+### Example 2: Adding a New Complaint
+
+```
+Digite sua opção: 2
+Insira sua reclamação: Air conditioning not working properly
+Reclamação adicionada com sucesso! 
+O código é 4
+```
+
+### Example 3: Searching for a Complaint
+
+```
+Digite sua opção: 3
+Digite o código da Reclamação: 2
+A reclamação pesquisada foi: System running slow
+```
+
+### Example 4: Updating a Complaint
+
+```
+Digite sua opção: 4
+Digite o código da reclamação a ser substituida: 2
+Digite a nova reclamação: System extremely slow - CRITICAL
+Reclamação substituida com sucesso!
+```
+
+### Example 5: Deleting a Complaint
+
+```
+Digite sua opção: 5
+Digite o código da Reclamação a ser Removida: 2
+Reclamação removida com sucesso!
+```
+
+### Example 6: Viewing Statistics
+
+```
+Digite sua opção: 6
+Atualmente temos 5 reclamações.
+```
+
+## 🔧 API Operations
+
+### Database Operations Module (`operacoesbd.py`)
+
+The `operacoesbd.py` module provides the **data access layer** with six core functions for CRUD operations:
+
+#### 1. **criarConexao()** - Create Connection
+
+```python
+conexao = criarConexao(host, user, password, database, port)
+```
+
+Establishes connection with MySQL database with error handling.
+
+#### 2. **encerrarConexao()** - Close Connection
+
+```python
+encerrarConexao(conexao)
+```
+
+Safely closes database connection.
+
+#### 3. **insertNoBancoDados()** - Insert Records
+
+```python
+novo_id = insertNoBancoDados(conexao, sql_query, dados)
+```
+
+Insert data with prepared statements and transaction support.
+
+#### 4. **listarBancoDados()** - Read Records
+
+```python
+resultados = listarBancoDados(conexao, sql_query, parametros)
+```
+
+Retrieve data with optional parameters.
+
+#### 5. **atualizarBancoDados()** - Update Records
+
+```python
+linhas_afetadas = atualizarBancoDados(conexao, sql_query, dados)
+```
+
+Update records with transaction management.
+
+#### 6. **excluirBancoDados()** - Delete Records
+
+```python
+linhas_deletadas = excluirBancoDados(conexao, sql_query, dados)
+```
+
+Delete records with error handling and rollback support.
+
+### Backend Layer (`backend.py`)
 
 ```python
 from backend import *
-from conexao import conectar
 
-opcao = 1
-conexao = conectar()
+# High-level operations
+listarReclamacoes(conexao)           # List all complaints
+novaReclamacao(conexao)              # Register new complaint
+pesquisarReclamacao(conexao)         # Search complaint by code
+substituirReclamacao(conexao)        # Update complaint
+removerReclamacao(conexao)           # Delete complaint
+quantidadeReclamacao(conexao)        # Display total count
+```
 
-# Loop principal que mantém o menu aberto
-while opcao != 7:
-    # Exibe opções e captura entrada do usuário
-    opcao = int(input("Digite sua opção: "))
-    
-    # Chama função correspondente do backend
-    if opcao == 1:
-        listarReclamacoes(conexao)
-    # ... e assim por diante
+## 🔐 Security Features
+
+### Implemented
+
+- ✅ **Prepared Statements** - Protection against SQL injection
+- ✅ **Error Handling** - Graceful error management
+- ✅ **Transaction Rollback** - Data consistency on failures
+- ✅ **Connection Validation** - Safe connection handling
+
+### Recommended for Production
+
+- 🔒 Use environment variables for credentials
+- 🔒 Implement authentication and authorization
+- 🔒 Add input validation and sanitization
+- 🔒 Enable MySQL SSL connections
+- 🔒 Implement audit logging
+- 🔒 Rate limiting for API endpoints
+
+## 📈 Future Improvements
+
+### Phase 2 - Enhanced Features
+- [ ] Web API REST endpoints (Flask/FastAPI)
+- [ ] Web-based dashboard interface
+- [ ] User authentication system
+- [ ] Role-based access control (RBAC)
+- [ ] Complaint categories and tagging
+
+### Phase 3 - Advanced Functionality
+- [ ] Email notifications for complaint updates
+- [ ] File attachment support
+- [ ] Comment threads on complaints
+- [ ] SLA tracking and management
+- [ ] Advanced search and filtering
+- [ ] Data export (CSV/PDF)
+
+### Phase 4 - DevOps & Scalability
+- [ ] Docker containerization
+- [ ] CI/CD pipeline (GitHub Actions)
+- [ ] Database migration scripts
+- [ ] Performance optimization
+- [ ] Database replication
+- [ ] Redis caching layer
+
+### Phase 5 - Quality & Testing
+- [ ] Unit tests (pytest)
+- [ ] Integration tests
+- [ ] API documentation (Swagger/OpenAPI)
+- [ ] Code coverage reporting
+- [ ] Load testing
+
+## 💡 Architecture Highlights
+
+### Design Patterns Used
+
+1. **Separation of Concerns** - Clear layer separation for UI, business logic, and data access
+2. **CRUD Pattern** - Standard Create, Read, Update, Delete operations
+3. **Error Handling Pattern** - Try-catch blocks with graceful error recovery
+4. **Connection Management** - Efficient resource handling
+
+### Best Practices Implemented
+
+✓ Prepared statements for SQL injection prevention  
+✓ Transaction management with rollback capability  
+✓ Resource cleanup with proper connection closure  
+✓ Meaningful error messages for debugging  
+✓ Modular code structure for maintainability  
+✓ Configuration externalization  
+
+## 🤝 Contributing
+
+This is an internship project demonstrating professional Python backend development. Feel free to fork, study, and build upon this codebase.
+
+### Development Workflow
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 👨‍💻 Author
+
+**Flavio Silva**
+
+- GitHub: [@flavio083](https://github.com/flavio083)
+- Repository: [ouvidoriaintegrabd](https://github.com/flavio083/ouvidoriaintegrabd)
+- Institution: Universidade Federal de Campina Grande (UNIFACISA)
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 📞 Support & Contact
+
+- 📧 For questions or issues, open a GitHub Issue
+- 💬 GitHub Discussions for feature requests
+- 🐛 Bug reports can be submitted via Issues
+
+## 🎓 Learning Resources
+
+This project demonstrates:
+
+- Python backend development best practices
+- Database design and SQL operations
+- Python MySQL integration
+- CLI application development
+- Modular architecture patterns
+- Error handling and exception management
+- Configuration management
+- Git version control workflows
+
+## 🚀 Quick Start Summary
+
+```bash
+# Clone repository
+git clone https://github.com/flavio083/ouvidoriaintegrabd.git
+cd OuvidoriaBDGIT
+
+# Setup virtual environment
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Configure database
+cp config_exemplo.py config.py
+# Edit config.py with your MySQL credentials
+
+# Run application
+python menuv2.py
 ```
 
 ---
 
-## 🔧 Métodos em backend.py
+**Made with ❤️ for backend development excellence**
 
-O arquivo `backend.py` contém **6 funções principais** que implementam a lógica de negócio. Cada função interage com o banco de dados através da biblioteca `operacoesbd.py`.
-
-### 1. **listarReclamacoes(conexao)**
-
-**Objetivo**: Exibir todas as reclamações cadastradas no banco de dados.
-
-**Funcionamento**:
-- Executa consulta SQL: `SELECT * FROM reclamacoes`
-- Utiliza método: `listarBancoDados()` da biblioteca operacoesbd
-- Se encontrar registros, exibe código e texto de cada reclamação
-- Se não houver registros, exibe mensagem de aviso
-
-**Código**:
-```python
-def listarReclamacoes(conexao):
-    consulta = 'select * from reclamacoes'
-    reclamacoes = listarBancoDados(conexao, consulta)
-    
-    if len(reclamacoes) > 0:
-        for item in reclamacoes:
-            print(item[0], "-", item[1])  # item[0] = código, item[1] = texto
-    else:
-        print("Nenhuma reclamação foi encontrado")
-```
-
----
-
-### 2. **novaReclamacao(conexao)**
-
-**Objetivo**: Registrar uma nova reclamação no banco de dados.
-
-**Funcionamento**:
-- Solicita ao usuário o texto da reclamação
-- Executa comando SQL: `INSERT INTO reclamacoes (reclamacao) VALUES (%s)`
-- Utiliza método: `insertNoBancoDados()` da biblioteca operacoesbd
-- Retorna o ID da nova reclamação gerado pelo banco de dados
-- Valida se o texto tem ao menos 1 caractere
-
-**Código**:
-```python
-def novaReclamacao(conexao):
-    novaReclamacao = input("Insira sua reclamação: ")
-    consulta = 'insert into reclamacoes (reclamacao) values (%s);'
-    dados = [novaReclamacao]
-    
-    codigoNovaReclamacao = insertNoBancoDados(conexao, consulta, dados)
-    
-    if len(novaReclamacao) > 0:
-        print("Reclamação adicionada com sucesso! \nO código é", codigoNovaReclamacao)
-    else:
-        print("Deve ser inserido ao menos 1 caractere!")
-```
-
----
-
-### 3. **pesquisarReclamacao(conexao)**
-
-**Objetivo**: Buscar uma reclamação específica pelo seu código.
-
-**Funcionamento**:
-- Solicita o código da reclamação ao usuário
-- Executa consulta: `SELECT * FROM reclamacoes WHERE codigo = %s`
-- Utiliza método: `listarBancoDados()` com parâmetro
-- Se encontrar, exibe o texto da reclamação
-- Se não encontrar, exibe mensagem de código inválido
-
-**Código**:
-```python
-def pesquisarReclamacao(conexao):
-    codigoReclamacao = int(input("Digite o código da Reclamação: "))
-    consulta = 'select * from reclamacoes where codigo = %s'
-    dados = [codigoReclamacao]
-    
-    reclamacoes = listarBancoDados(conexao, consulta, dados)
-    
-    if len(reclamacoes) > 0:
-        print("A reclamação pesquisada foi:", reclamacoes[0][1])
-    else:
-        print("O código informado não é válido.")
-```
-
----
-
-### 4. **substituirReclamacao(conexao)**
-
-**Objetivo**: Atualizar o texto de uma reclamação existente.
-
-**Funcionamento**:
-- Solicita código da reclamação a ser atualizada
-- Solicita novo texto da reclamação
-- Executa comando: `UPDATE reclamacoes SET reclamacao = %s WHERE codigo = %s`
-- Utiliza método: `atualizarBancoDados()` da biblioteca operacoesbd
-- Verifica quantas linhas foram afetadas pela atualização
-
-**Código**:
-```python
-def substituirReclamacao(conexao):
-    codigoNovaReclamacao = int(input("Digite o código da reclamação a ser substituida: "))
-    novaReclamação = input("Digite a nova reclamação: ")
-    
-    consulta = 'UPDATE reclamacoes SET reclamacao = %s WHERE codigo = %s'
-    dados = [novaReclamação, codigoNovaReclamacao]
-    
-    linhasAfetadas = atualizarBancoDados(conexao, consulta, dados)
-    
-    if linhasAfetadas == 0:
-        print("Não possui nenhuma reclamação para o código informado.")
-    else:
-        print("Reclamação substituida com sucesso!")
-```
-
----
-
-### 5. **removerReclamacao(conexao)**
-
-**Objetivo**: Deletar uma reclamação do banco de dados.
-
-**Funcionamento**:
-- Solicita código da reclamação a ser removida
-- Executa comando: `DELETE FROM reclamacoes WHERE codigo = %s`
-- Utiliza método: `excluirBancoDados()` da biblioteca operacoesbd
-- Verifica se o código era válido através da contagem de linhas afetadas
-
-**Código**:
-```python
-def removerReclamacao(conexao):
-    codigoReclamacao = int(input("Digite o código da Reclamação a ser Removida: "))
-    consulta = 'delete from reclamacoes where codigo = %s'
-    dados = [codigoReclamacao]
-    
-    linhasAfetadas = excluirBancoDados(conexao, consulta, dados)
-    
-    if linhasAfetadas == 0:
-        print("O código informado não é válido.")
-    else:
-        print("Reclamação removida com sucesso!")
-```
-
----
-
-### 6. **quantidadeReclamacao(conexao)**
-
-**Objetivo**: Exibir o total de reclamações cadastradas.
-
-**Funcionamento**:
-- Executa consulta de contagem: `SELECT COUNT(*) FROM reclamacoes`
-- Utiliza método: `listarBancoDados()` da biblioteca operacoesbd
-- Extrai o valor total (primeiro elemento do resultado)
-- Exibe mensagem personalizada de acordo com a quantidade
-
-**Código**:
-```python
-def quantidadeReclamacao(conexao):
-    consulta = 'select count(*) from reclamacoes'
-    reclamacoes = listarBancoDados(conexao, consulta)
-    
-    total = reclamacoes[0][0]
-    
-    if total <= 0:
-        print("Atualmente não temos reclamação.")
-    elif total == 1:
-        print("Atualmente temos", total, "reclamação.")
-    else:
-        print("Atualmente temos", total, "reclamações.")
-```
-
----
-
-## 📦 Explicação da Biblioteca operacoesbd.py
-
-A biblioteca `operacoesbd.py` é a **camada de acesso ao banco de dados** que fornece funções reutilizáveis para executar operações CRUD (Create, Read, Update, Delete) de forma segura e estruturada.
-
-### Dependências:
-```python
-import mysql.connector  # Biblioteca oficial do MySQL para Python
-```
-
----
-
-### Funções da Biblioteca:
-
-#### 1. **criarConexao(endereco, usuario, senha, bancodedados, porta)**
-
-**Objetivo**: Estabelecer conexão com o banco de dados MySQL.
-
-**Parâmetros**:
-- `endereco`: IP ou hostname do servidor MySQL
-- `usuario`: Usuário do banco de dados
-- `senha`: Senha do usuário
-- `bancodedados`: Nome do banco de dados
-- `porta`: Porta de acesso (padrão: 3306)
-
-**Retorna**: Objeto de conexão ou `None` se falhar
-
-**Características**:
-- Trata exceções de conexão
-- Exibe mensagem de erro em caso de falha
-
-```python
-def criarConexao(endereco, usuario, senha, bancodedados, porta):
-    try:
-        return mysql.connector.connect(
-            host=endereco,
-            port=porta,
-            user=usuario,
-            password=senha,
-            database=bancodedados
-        )
-    except mysql.connector.Error as err:
-        print(f"Erro ao conectar ao banco de dados: {err}")
-        return None
-```
-
----
-
-#### 2. **encerrarConexao(connection)**
-
-**Objetivo**: Fechar a conexão com o banco de dados.
-
-**Parâmetro**:
-- `connection`: Objeto de conexão retornado por `criarConexao()`
-
-**Funcionamento**:
-- Verifica se a conexão está ativa
-- Fecha a conexão de forma segura
-
-```python
-def encerrarConexao(connection):
-    if connection:
-        connection.close()
-```
-
----
-
-#### 3. **insertNoBancoDados(connection, sql, dados)**
-
-**Objetivo**: Inserir dados no banco de dados com prepared statements.
-
-**Parâmetros**:
-- `connection`: Objeto de conexão ativa
-- `sql`: Comando SQL com placeholders `%s`
-- `dados`: Lista de valores para inserir
-
-**Retorna**: ID da linha inserida (lastrowid) ou `None` se erro
-
-**Características**:
-- Usa **prepared statements** para evitar SQL injection
-- Faz commit automático
-- Reverte transação em caso de erro (rollback)
-- Trata exceções do MySQL
-
-```python
-def insertNoBancoDados(connection, sql, dados):
-    try:
-        cursor = connection.cursor(prepared=True)
-        cursor.execute(sql, dados)
-        connection.commit()
-        id = cursor.lastrowid
-    except mysql.connector.Error as err:
-        print(f"Erro ao inserir no banco de dados: {err}")
-        connection.rollback()
-        return None
-    finally:
-        cursor.close()
-    return id
-```
-
-**Exemplo de uso**:
-```python
-sql = 'INSERT INTO reclamacoes (reclamacao) VALUES (%s)'
-dados = ['Esta é uma reclamação']
-id = insertNoBancoDados(conexao, sql, dados)
-print(f"Reclamação inserida com ID: {id}")
-```
-
----
-
-#### 4. **listarBancoDados(connection, sql, params=None)**
-
-**Objetivo**: Consultar dados do banco de dados.
-
-**Parâmetros**:
-- `connection`: Objeto de conexão ativa
-- `sql`: Comando SQL SELECT
-- `params`: Lista de parâmetros (opcional)
-
-**Retorna**: Lista de tuplas com os resultados ou lista vazia se erro
-
-**Características**:
-- Suporta consultas com e sem parâmetros
-- Usa prepared statements
-- Retorna todos os resultados com `fetchall()`
-- Trata exceções
-
-```python
-def listarBancoDados(connection, sql, params=None):
-    try:
-        cursor = connection.cursor(prepared=True)
-        if params is None:
-            cursor.execute(sql)
-        else:
-            cursor.execute(sql, params)
-        results = cursor.fetchall()
-    except mysql.connector.Error as err:
-        print(f"Erro ao listar do banco de dados: {err}")
-        return []
-    finally:
-        cursor.close()
-    return results
-```
-
-**Exemplos de uso**:
-```python
-# Sem parâmetros
-todas = listarBancoDados(conexao, 'SELECT * FROM reclamacoes')
-
-# Com parâmetros
-codigo = 5
-resultado = listarBancoDados(conexao, 'SELECT * FROM reclamacoes WHERE codigo = %s', [codigo])
-```
-
----
-
-#### 5. **atualizarBancoDados(connection, sql, dados)**
-
-**Objetivo**: Atualizar registros no banco de dados.
-
-**Parâmetros**:
-- `connection`: Objeto de conexão ativa
-- `sql`: Comando SQL UPDATE com placeholders
-- `dados`: Lista de valores para atualizar
-
-**Retorna**: Número de linhas afetadas pela atualização
-
-**Características**:
-- Usa prepared statements
-- Faz commit automático
-- Reverte em caso de erro (rollback)
-- Retorna contagem de linhas modificadas
-
-```python
-def atualizarBancoDados(connection, sql, dados):
-    try:
-        cursor = connection.cursor(prepared=True)
-        cursor.execute(sql, dados)
-        connection.commit()
-        linhasAfetadas = cursor.rowcount
-    except mysql.connector.Error as err:
-        print(f"Erro ao atualizar o banco de dados: {err}")
-        connection.rollback()
-        return 0
-    finally:
-        cursor.close()
-    return linhasAfetadas
-```
-
-**Exemplo de uso**:
-```python
-sql = 'UPDATE reclamacoes SET reclamacao = %s WHERE codigo = %s'
-dados = ['Reclamação atualizada', 5]
-linhas = atualizarBancoDados(conexao, sql, dados)
-if linhas > 0:
-    print(f"Atualizadas {linhas} linha(s)")
-```
-
----
-
-#### 6. **excluirBancoDados(connection, sql, dados)**
-
-**Objetivo**: Deletar registros do banco de dados.
-
-**Parâmetros**:
-- `connection`: Objeto de conexão ativa
-- `sql`: Comando SQL DELETE com placeholders
-- `dados`: Lista de valores para identificar o que deletar
-
-**Retorna**: Número de linhas deletadas
-
-**Características**:
-- Usa prepared statements
-- Faz commit automático
-- Reverte em caso de erro (rollback)
-- Retorna contagem de linhas apagadas
-
-```python
-def excluirBancoDados(connection, sql, dados):
-    try:
-        cursor = connection.cursor(prepared=True)
-        cursor.execute(sql, dados)
-        connection.commit()
-        linhasAfetadas = cursor.rowcount
-    except mysql.connector.Error as err:
-        print(f"Erro ao excluir do banco de dados: {err}")
-        connection.rollback()
-        return 0
-    finally:
-        cursor.close()
-    return linhasAfetadas
-```
-
-**Exemplo de uso**:
-```python
-sql = 'DELETE FROM reclamacoes WHERE codigo = %s'
-dados = [5]
-linhas = excluirBancoDados(conexao, sql, dados)
-if linhas > 0:
-    print(f"Deletadas {linhas} linha(s)")
-else:
-    print("Nenhum registro encontrado com esse código")
-```
-
----
-
-## 🔒 Recursos de Segurança
-
-A biblioteca `operacoesbd.py` implementa várias boas práticas de segurança:
-
-1. **Prepared Statements**: Previnem SQL injection usando placeholders `%s`
-2. **Transactions (Commit/Rollback)**: Mantêm integridade dos dados
-3. **Try-Except**: Tratamento de exceções e erros de conexão
+⭐ If this project helped you, please consider giving it a star!
 4. **Cursor Management**: Fecha cursores após uso para liberar recursos
 5. **Parâmetros Seguros**: Dados separados do SQL
 
