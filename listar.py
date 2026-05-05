@@ -1,9 +1,8 @@
 from operacoesbd import *
-from conexao import conectar
 
-conexao = conectar()
+conexao = criarConexao("localhost","root","Futebol06!","ouvidoriabd",3306)
 
-consulta = 'select * from reclamacoes'
+consulta = 'select * from Reclamações'
 reclamacoes = listarBancoDados(conexao,consulta)
 
 if len(reclamacoes) > 0:

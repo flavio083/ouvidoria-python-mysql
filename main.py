@@ -1,8 +1,7 @@
-from conexao import conectar
-from operacoesbd import encerrarConexao
+from operacoesbd import *
 
-conexao = conectar()
+conexao = criarConexao("localhost","root","Futebol06!","ouvidoriabd",3306)
 
-# usar a conexão
+#usar a conexao
 
 encerrarConexao(conexao)

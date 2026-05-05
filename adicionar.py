@@ -1,10 +1,10 @@
-from conexao import conectar
 from operacoesbd import *
 
-conexao = conectar()
+conexao = criarConexao("localhost","root","Futebol06!","ouvidoriabd",3306)
+
 novaReclamacao = (input("Insira sua reclamação: "))
 
-consulta = 'insert into reclamacoes (reclamacao) values (%s);'
+consulta = 'insert into Reclamações (reclamacao) values (%s);'
 reclamacoes = listarBancoDados(conexao,consulta)
 dados = [ novaReclamacao ]
 

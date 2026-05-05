@@ -1,8 +1,7 @@
 from operacoesbd import *
-from conexao import conectar
 
 opcao = 1
-conexao = conectar()
+conexao = criarConexao("localhost","root","Futebol06!","ouvidoriabd",3306)
 
 print("Olá, tudo bem?\nVenho aqui desejar as boas vindas á Ouvidoria Unifacisa!")
 
@@ -13,7 +12,7 @@ while opcao != 7:
 
     
     if opcao == 1:
-        consulta = 'select * from reclamacoes'
+        consulta = 'select * from Reclamações'
         reclamacoes = listarBancoDados(conexao, consulta)
 
         if len(reclamacoes) > 0:
@@ -22,13 +21,13 @@ while opcao != 7:
                 print(item[0], "-", item[1])
 
         else:
-            print("Nenhum filme foi encontrado")
+            print("Nenhuma reclamação foi encontrada")
 
 
     elif opcao == 2:
         novaReclamacao = (input("Insira sua reclamação: "))
 
-        consulta = 'insert into reclamacoes (reclamacao) values (%s);'
+        consulta = 'insert into Reclamações (reclamacao) values (%s);'
         reclamacoes = listarBancoDados(conexao, consulta)
         dados = [novaReclamacao]
 
@@ -44,7 +43,7 @@ while opcao != 7:
 
     elif opcao == 3:
         codigoReclamacao = int(input("Digite o código da Reclamação: "))
-        consulta = 'select * from reclamacoes where codigo = %s'
+        consulta = 'select * from Reclamações where codigo = %s'
         dados = [codigoReclamacao]
 
         reclamacoes = listarBancoDados(conexao, consulta, dados)
@@ -60,7 +59,7 @@ while opcao != 7:
         codigoNovaReclamacao = int(input("Digite o código da reclamação a ser substituida: "))
         novaReclamação = input("Digite a nova reclamação: ")
 
-        consulta = 'UPDATE reclamacoes SET reclamacao = %s WHERE codigo = %s'
+        consulta = 'UPDATE Reclamações SET reclamacao = %s WHERE codigo = %s'
         dados = [novaReclamação, codigoNovaReclamacao]
 
         linhasAfetadas = atualizarBancoDados(conexao, consulta, dados)
@@ -74,7 +73,7 @@ while opcao != 7:
 
     elif opcao == 5:
         codigoReclamacao = int(input("Digite o código da Reclamação a ser Removida: "))
-        consulta = 'delete from reclamacoes where codigo = %s'
+        consulta = 'delete from Reclamações where codigo = %s'
         dados = [codigoReclamacao]
 
         linhasAfetadas = excluirBancoDados(conexao, consulta, dados)
@@ -87,7 +86,7 @@ while opcao != 7:
     
 
     elif opcao == 6:
-        consulta = 'select count(*) from reclamacoes'
+        consulta = 'select count(*) from Reclamações'
         reclamacoes = listarBancoDados(conexao, consulta)
 
         total = reclamacoes[0][0]

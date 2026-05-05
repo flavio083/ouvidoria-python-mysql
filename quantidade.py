@@ -1,8 +1,8 @@
-from conexao import conectar
 from operacoesbd import *
 
-conexao = conectar()
-consulta = 'select count(*) from reclamacoes'
+conexao = criarConexao("localhost","root","Futebol06!","ouvidoriabd",3306)
+
+consulta = 'select count(*) from Reclamações'
 reclamacoes = listarBancoDados(conexao,consulta)
 
 total = reclamacoes[0][0]

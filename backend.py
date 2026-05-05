@@ -1,7 +1,7 @@
 from operacoesbd import *
 
 def listarReclamacoes(conexao):
-    consulta = 'select * from reclamacoes'
+    consulta = 'select * from Reclamações'
     reclamacoes = listarBancoDados(conexao, consulta)
 
     if len(reclamacoes) > 0:
@@ -10,13 +10,13 @@ def listarReclamacoes(conexao):
             print(item[0], "-", item[1])
 
     else:
-        print("Nenhuma reclamação foi encontrado")
+        print("Nenhuma reclamação foi encontrada")
 
 
 def novaReclamacao(conexao):
     novaReclamacao = (input("Insira sua reclamação: "))
 
-    consulta = 'insert into reclamacoes (reclamacao) values (%s);'
+    consulta = 'insert into Reclamações (reclamacao) values (%s);'
     reclamacoes = listarBancoDados(conexao, consulta)
     dados = [novaReclamacao]
 
@@ -31,7 +31,7 @@ def novaReclamacao(conexao):
 
 def  pesquisarReclamacao(conexao):
     codigoReclamacao = int(input("Digite o código da Reclamação: "))
-    consulta = 'select * from reclamacoes where codigo = %s'
+    consulta = 'select * from Reclamações where codigo = %s'
     dados = [codigoReclamacao]
 
     reclamacoes = listarBancoDados(conexao, consulta, dados)
@@ -46,7 +46,7 @@ def substituirReclamacao(conexao):
     codigoNovaReclamacao = int(input("Digite o código da reclamação a ser substituida: "))
     novaReclamação = input("Digite a nova reclamação: ")
 
-    consulta = 'UPDATE reclamacoes SET reclamacao = %s WHERE codigo = %s'
+    consulta = 'UPDATE Reclamações SET reclamacao = %s WHERE codigo = %s'
     dados = [novaReclamação, codigoNovaReclamacao]
 
     linhasAfetadas = atualizarBancoDados(conexao, consulta, dados)
@@ -58,7 +58,7 @@ def substituirReclamacao(conexao):
 
 def removerReclamacao(conexao):
     codigoReclamacao = int(input("Digite o código da Reclamação a ser Removida: "))
-    consulta = 'delete from reclamacoes where codigo = %s'
+    consulta = 'delete from Reclamações where codigo = %s'
     dados = [codigoReclamacao]
 
     linhasAfetadas = excluirBancoDados(conexao, consulta, dados)
@@ -70,7 +70,7 @@ def removerReclamacao(conexao):
 
 
 def quantidadeReclamacao(conexao):
-    consulta = 'select count(*) from reclamacoes'
+    consulta = 'select count(*) from Reclamações'
     reclamacoes = listarBancoDados(conexao, consulta)
 
     total = reclamacoes[0][0]

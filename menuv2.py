@@ -1,8 +1,7 @@
 from backend import *
-from conexao import conectar
 
 opcao = 1
-conexao = conectar()
+conexao = criarConexao("localhost","root","Futebol06!","ouvidoriabd",3306)
 
 print("Olá, tudo bem?\nVenho aqui desejar as boas vindas á Ouvidoria Unifacisa!")
 

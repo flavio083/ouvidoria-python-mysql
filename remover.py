@@ -1,9 +1,9 @@
-from conexao import conectar
 from operacoesbd import *
 
-conexao = conectar()
+conexao = criarConexao("localhost","root","Futebol06!","ouvidoriabd",3306)
+
 codigoReclamacao = int(input("Digite o código da Reclamação a ser Removida: "))
-consulta = 'delete from reclamacoes where codigo = %s'
+consulta = 'delete from Reclamações where codigo = %s'
 dados = [ codigoReclamacao ]
 
 linhasAfetadas = excluirBancoDados(conexao,consulta,dados)

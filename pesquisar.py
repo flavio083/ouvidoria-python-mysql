@@ -1,10 +1,9 @@
-from conexao import conectar
 from operacoesbd import *
 
-conexao = conectar()
+conexao = criarConexao("localhost","root","Futebol06!","ouvidoriabd",3306)
 
 codigoReclamacao = int(input("Digite o código da Reclamação: "))
-consulta = 'select * from reclamacoes where codigo = %s'
+consulta = 'select * from Reclamações where codigo = %s'
 dados = [codigoReclamacao]
 
 reclamacoes = listarBancoDados(conexao,consulta,dados)

@@ -1,11 +1,11 @@
-from conexao import conectar
 from operacoesbd import *
 
-conexao = conectar()
+conexao = criarConexao("localhost","root","Futebol06!","ouvidoriabd",3306)
+
 codigoNovaReclamacao = int(input("Digite o código da reclamação a ser substituida: "))
 novaReclamação = input("Digite a nova reclamação: ")
 
-consulta = 'UPDATE reclamacoes SET reclamacao = %s WHERE codigo = %s'
+consulta = 'UPDATE Reclamações SET reclamacao = %s WHERE codigo = %s'
 dados = [ novaReclamação, codigoNovaReclamacao]
 
 linhasAfetadas = atualizarBancoDados(conexao,consulta,dados)
