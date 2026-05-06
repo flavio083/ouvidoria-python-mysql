@@ -17,6 +17,12 @@ CORS(app)
 
 @app.route("/")
 def index():
+    """Client interface - Futuristic AI Dashboard."""
+    return render_template("index.html")
+
+@app.route("/admin")
+def admin():
+    """Administrative interface - Backend management panel."""
     return render_template("admin.html")
 
 def get_conexao():
