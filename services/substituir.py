@@ -1,6 +1,11 @@
-from operacoesbd import *
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
-conexao = criarConexao("localhost","root","Futebol06!","ouvidoriabd",3306)
+from database.operacoesbd import *
+from config.config import *
+
+conexao = criarConexao(HOST, USER, PASSWORD, DATABASE, PORT)
 
 codigoNovaReclamacao = int(input("Digite o código da reclamação a ser substituida: "))
 novaReclamação = input("Digite a nova reclamação: ")

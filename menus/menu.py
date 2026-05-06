@@ -1,7 +1,12 @@
-from operacoesbd import *
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
+from database.operacoesbd import *
+from config.config import *
 
 opcao = 1
-conexao = criarConexao("localhost","root","Futebol06!","ouvidoriabd",3306)
+conexao = criarConexao(HOST, USER, PASSWORD, DATABASE, PORT)
 
 print("Olá, tudo bem?\nVenho aqui desejar as boas vindas á Ouvidoria Unifacisa!")
 
@@ -97,8 +102,6 @@ while opcao != 7:
             print("Atualmente temos", total, "reclamação.")
         else:
             print("Atualmente temos", total, "reclamações.")
-
-
 
     elif opcao != 7:
         print("Opção Inválida")

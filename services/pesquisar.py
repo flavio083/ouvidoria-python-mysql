@@ -1,6 +1,11 @@
-from operacoesbd import *
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
-conexao = criarConexao("localhost","root","Futebol06!","ouvidoriabd",3306)
+from database.operacoesbd import *
+from config.config import *
+
+conexao = criarConexao(HOST, USER, PASSWORD, DATABASE, PORT)
 
 codigoReclamacao = int(input("Digite o código da Reclamação: "))
 consulta = 'select * from Reclamações where codigo = %s'

@@ -1,4 +1,4 @@
-from operacoesbd import *
+from database.operacoesbd import *
 
 def listarReclamacoes(conexao):
     consulta = 'select * from Reclamações'
