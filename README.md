@@ -1,6 +1,8 @@
-# 📋 Ouvidoria System
+# 🌐 Ouvidoria Web System
 
-A modular complaint management system built with Python and MySQL.
+A complaint management system built with Python, Flask and MySQL.
+
+This branch contains the web version of the original CLI project.
 
 ---
 
@@ -11,81 +13,44 @@ A modular complaint management system built with Python and MySQL.
 ✅ Search complaints  
 ✅ Update complaints  
 ✅ Remove complaints  
-✅ Count records  
-✅ Modular architecture  
-✅ Secure local configuration  
+✅ REST API  
+✅ Web interface  
+✅ Admin dashboard  
 
 ---
 
 # 🛠 Technologies
 
 - Python
+- Flask
+- Flask-CORS
 - MySQL
-- Git
+- HTML
+- CSS
+- JavaScript
 
 ---
 
 # 📂 Project Structure
 
-```bash
+```txt
 ouvidoria-python-mysql/
 │
-├── main.py
-├── README.md
-├── LICENSE
-│
 ├── config/
-│   ├── __init__.py
-│   └── config_exemplo.py
-│
 ├── database/
-│   ├── __init__.py
-│   └── operacoesbd.py
-│
 ├── services/
-│   ├── __init__.py
-│   ├── backend.py
-│   ├── adicionar.py
-│   ├── listar.py
-│   ├── pesquisar.py
-│   ├── remover.py
-│   └── substituir.py
-│
 ├── menus/
-│   ├── __init__.py
-│   ├── menu.py
-│   └── menuv2.py
+│
+└── web/
+    ├── app.py
+    ├── requirements.txt
+    ├── templates/
+    └── static/
 ```
 
 ---
 
-# ⚙️ Configuration
-
-Create:
-
-```bash
-config/config.py
-```
-
-Using:
-
-```python
-HOST = "localhost"
-USER = "your_user"
-PASSWORD = "your_password"
-DATABASE = "your_database"
-PORT = 3306
-```
-
-A template is included:
-
-```bash
-config/config_exemplo.py
-```
-
----
-
-# ▶️ Running
+# ⚙️ Installation
 
 Clone repository:
 
@@ -93,23 +58,51 @@ Clone repository:
 git clone https://github.com/flavio083/ouvidoria-python-mysql.git
 ```
 
-Run:
+Install dependencies:
 
 ```bash
-python main.py
+pip install -r web/requirements.txt
+```
+
+Run application:
+
+```bash
+python -m web.app
+```
+
+Open:
+
+```txt
+http://localhost:5000
 ```
 
 ---
 
-# 🎯 Learning Outcomes
+# API Endpoints
 
-This project helped me improve in:
+## List
 
-- CRUD operations
-- Python modularization
-- Database integration
-- Git and GitHub workflow
-- Software organization
+```http
+GET /api/reclamacoes
+```
+
+## Create
+
+```http
+POST /api/reclamacoes
+```
+
+## Update
+
+```http
+PUT /api/reclamacoes/<id>
+```
+
+## Delete
+
+```http
+DELETE /api/reclamacoes/<id>
+```
 
 ---
 
