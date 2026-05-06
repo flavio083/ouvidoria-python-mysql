@@ -11,8 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-    <link rel="stylesheet" href="styles.css" />
-</head>
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" /></head>
 <body>
     <!-- PARTICLE CANVAS -->
     <canvas id="particleCanvas"></canvas>
@@ -229,6 +228,5 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
-</body>
+<script src="{{ url_for('static', filename='script.js') }}"></script><script src="{{ url_for('static', filename='script.js') }}"></script></body>
 </html>
