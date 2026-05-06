@@ -9,39 +9,43 @@ from database.operacoesbd import (
     atualizarBancoDados,
     excluirBancoDados,
 )
-
 from config.config import HOST, USER, PASSWORD, DATABASE, PORT
 
 app = Flask(__name__)
 CORS(app)
 
+
+# Routes
 @app.route("/")
 def index():
-    """Client interface - Futuristic AI Dashboard."""
     return render_template("index.html")
+
 
 @app.route("/admin")
 def admin():
-    """Administrative interface - Backend management panel."""
     return render_template("admin.html")
 
+
+# Database helpers
 def get_conexao():
-    """Cria e retorna uma conexão com o banco de dados."""
-    conexao = criarConexao(HOST, USER, PASSWORD, DATABASE, PORT)
-    if conexao is None:
-        return None
-    return conexao
+    return criarConexao(HOST, USER, PASSWORD, DATABASE, PORT)
 
 
-def serializar_reclamacao(row):
-    """Converte uma tupla (codigo, reclamacao) em dicionário."""
+def _serialize_complaint(row):
     return {"codigo": row[0], "reclamacao": row[1]}
 
 
+def _validate_complaint_text(text):
+    text = text.strip()
+    if len(text) == 0:
+        return None, "Deve ser inserido ao menos 1 caractere!"
+    return text, None
 
+
+
+# API Routes
 @app.route("/api/reclamacoes", methods=["GET"])
 def listar_reclamacoes():
-    """Lista todas as reclamações."""
     conexao = get_conexao()
     if conexao is None:
         return jsonify({"erro": "Falha ao conectar ao banco de dados"}), 500
@@ -49,22 +53,20 @@ def listar_reclamacoes():
     try:
         consulta = "SELECT * FROM Reclamações"
         reclamacoes = listarBancoDados(conexao, consulta)
-        resultado = [serializar_reclamacao(r) for r in reclamacoes]
-        return jsonify(resultado), 200
+        return jsonify([_serialize_complaint(r) for r in reclamacoes]), 200
     finally:
         encerrarConexao(conexao)
 
 
 @app.route("/api/reclamacoes", methods=["POST"])
 def criar_reclamacao():
-    """Cria uma nova reclamação."""
-    dados_json = request.get_json(silent=True)
-    if not dados_json or not dados_json.get("reclamacao"):
-        return jsonify({"erro": "O campo 'reclamacao' é obrigatório e não pode estar vazio."}), 400
+    dados = request.get_json(silent=True)
+    if not dados or not dados.get("reclamacao"):
+        return jsonify({"erro": "Campo 'reclamacao' é obrigatório."}), 400
 
-    texto = dados_json["reclamacao"].strip()
-    if len(texto) == 0:
-        return jsonify({"erro": "Deve ser inserido ao menos 1 caractere!"}), 400
+    texto, erro = _validate_complaint_text(dados["reclamacao"])
+    if erro:
+        return jsonify({"erro": erro}), 400
 
     conexao = get_conexao()
     if conexao is None:
@@ -88,7 +90,6 @@ def criar_reclamacao():
 
 @app.route("/api/reclamacoes/<int:codigo>", methods=["GET"])
 def pesquisar_reclamacao(codigo):
-    """Pesquisa uma reclamação pelo código."""
     conexao = get_conexao()
     if conexao is None:
         return jsonify({"erro": "Falha ao conectar ao banco de dados"}), 500
@@ -97,24 +98,22 @@ def pesquisar_reclamacao(codigo):
         consulta = "SELECT * FROM Reclamações WHERE codigo = %s"
         reclamacoes = listarBancoDados(conexao, consulta, [codigo])
 
-        if len(reclamacoes) > 0:
-            return jsonify(serializar_reclamacao(reclamacoes[0])), 200
-        else:
-            return jsonify({"erro": "O código informado não é válido."}), 404
+        if reclamacoes:
+            return jsonify(_serialize_complaint(reclamacoes[0])), 200
+        return jsonify({"erro": "O código informado não é válido."}), 404
     finally:
         encerrarConexao(conexao)
 
 
 @app.route("/api/reclamacoes/<int:codigo>", methods=["PUT"])
 def atualizar_reclamacao(codigo):
-    """Atualiza (substitui) uma reclamação existente."""
-    dados_json = request.get_json(silent=True)
-    if not dados_json or not dados_json.get("reclamacao"):
-        return jsonify({"erro": "O campo 'reclamacao' é obrigatório."}), 400
+    dados = request.get_json(silent=True)
+    if not dados or not dados.get("reclamacao"):
+        return jsonify({"erro": "Campo 'reclamacao' é obrigatório."}), 400
 
-    novo_texto = dados_json["reclamacao"].strip()
-    if len(novo_texto) == 0:
-        return jsonify({"erro": "Deve ser inserido ao menos 1 caractere!"}), 400
+    novo_texto, erro = _validate_complaint_text(dados["reclamacao"])
+    if erro:
+        return jsonify({"erro": erro}), 400
 
     conexao = get_conexao()
     if conexao is None:
@@ -125,7 +124,7 @@ def atualizar_reclamacao(codigo):
         linhas = atualizarBancoDados(conexao, consulta, [novo_texto, codigo])
 
         if linhas == 0:
-            return jsonify({"erro": "Não possui nenhuma reclamação para o código informado."}), 404
+            return jsonify({"erro": "Não existe reclamação para o código informado."}), 404
 
         return jsonify({
             "mensagem": "Reclamação substituída com sucesso!",
@@ -138,7 +137,6 @@ def atualizar_reclamacao(codigo):
 
 @app.route("/api/reclamacoes/<int:codigo>", methods=["DELETE"])
 def remover_reclamacao(codigo):
-    """Remove uma reclamação pelo código."""
     conexao = get_conexao()
     if conexao is None:
         return jsonify({"erro": "Falha ao conectar ao banco de dados"}), 500
@@ -157,7 +155,6 @@ def remover_reclamacao(codigo):
 
 @app.route("/api/reclamacoes/quantidade", methods=["GET"])
 def quantidade_reclamacoes():
-    """Retorna a quantidade total de reclamações."""
     conexao = get_conexao()
     if conexao is None:
         return jsonify({"erro": "Falha ao conectar ao banco de dados"}), 500
