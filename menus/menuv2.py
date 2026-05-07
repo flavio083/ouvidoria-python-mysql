@@ -1,43 +1,56 @@
-# Legacy file kept for compatibility.
-
 import sys
 from pathlib import Path
+
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from services.backend import *
+from database.operacoesbd import *
 from config.config import *
 
-opcao = 1
-conexao = criarConexao(HOST, USER, PASSWORD, DATABASE, PORT)
 
-print("Olá, tudo bem?\nVenho aqui desejar as boas vindas á Ouvidoria Unifacisa!")
+def run_menu():
+    conexao = criarConexao(HOST, USER, PASSWORD, DATABASE, PORT)
 
-while opcao != 7:
-    print('''\n1) Listar Reclamações;\n2) Registrar uma nova reclamação;\n3) Pesquisar uma reclamação pelo código;\n4) Atualizar uma reclamação existente;\n5) Remover uma reclamação pelo código;\n6) Mostrar a quantidade total de reclamações cadastradas;\n7) Opção para sair do sistema.
-''')
-    opcao = int(input("Digite sua opção: "))
+    print("Olá, tudo bem?")
+    print("Venho aqui desejar as boas vindas á Ouvidoria Unifacisa!")
+
+    opcao = 0
+
+    while opcao != 7:
+        print("\n1) Listar Reclamações;")
+        print("2) Registrar uma nova reclamação;")
+        print("3) Pesquisar uma reclamação pelo código;")
+        print("4) Atualizar uma reclamação existente;")
+        print("5) Remover uma reclamação pelo código;")
+        print("6) Mostrar a quantidade total de reclamações cadastradas;")
+        print("7) Opção para sair do sistema.")
+
+        opcao = int(input("\nDigite sua opção: "))
+
+        if opcao == 1:
+            listarReclamacoes(conexao)
+
+        elif opcao == 2:
+            novaReclamacao(conexao)
+
+        elif opcao == 3:
+            pesquisarReclamacao(conexao)
+
+        elif opcao == 4:
+            substituirReclamacao(conexao)
+
+        elif opcao == 5:
+            removerReclamacao(conexao)
+
+        elif opcao == 6:
+            quantidadeReclamacao(conexao)
+
+        elif opcao != 7:
+            print("Opção inválida")
+
+    encerrarConexao(conexao)
+    print("Foi um prazer ter você aqui hoje! \nOuvidoria Unifacisa agradece.")
 
 
-    if opcao == 1:
-        listarReclamacoes(conexao)
-
-    elif opcao == 2:
-        novaReclamacao(conexao)
-
-    elif opcao == 3:
-        pesquisarReclamacao(conexao)
-
-    elif opcao == 4:
-        substituirReclamacao(conexao)
-
-    elif opcao == 5:
-        removerReclamacao(conexao)
-
-    elif opcao == 6:
-        quantidadeReclamacao(conexao)
-
-    elif opcao != 7:
-        print("Opção Inválida")
-
-encerrarConexao(conexao)
-print("Foi um prazer ter você aqui hoje! \nOuvidoria Unifacisa agradece.")
+if __name__ == "__main__":
+    run_menu()

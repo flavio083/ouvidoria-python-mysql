@@ -1,12 +1,10 @@
 import sys
 from pathlib import Path
+
 sys.path.insert(0, str(Path(__file__).parent))
 
-from database.operacoesbd import *
-from config.config import *
+from menus.menuv2 import run_menu
 
-conexao = criarConexao(HOST, USER, PASSWORD, DATABASE, PORT)
 
-#usar a conexao
-
-encerrarConexao(conexao)
+if __name__ == "__main__":
+    run_menu()
