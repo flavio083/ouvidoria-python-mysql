@@ -1,12 +1,23 @@
+"""
+Main application entrypoint for Ouvidoria System.
+
+This module initializes and runs the command-line menu interface.
+"""
+
 import sys
 from pathlib import Path
+
+# Add project root to path for imports
 sys.path.insert(0, str(Path(__file__).parent))
 
-from database.operacoesbd import *
-from config.config import *
+# Import the production menu
+from menus.menuv2 import run_menu
 
-conexao = criarConexao(HOST, USER, PASSWORD, DATABASE, PORT)
 
-#usar a conexao
+def main():
+    """Start the Ouvidoria application."""
+    run_menu()
 
-encerrarConexao(conexao)
+
+if __name__ == "__main__":
+    main()

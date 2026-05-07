@@ -1,4 +1,17 @@
-from database.operacoesbd import *
+"""
+Backend business logic for complaint management operations.
+
+This module provides high-level functions for managing user complaints.
+"""
+
+# Local imports
+from database.operacoesbd import (
+    listarBancoDados,
+    insertNoBancoDados,
+    atualizarBancoDados,
+    excluirBancoDados,
+)
+
 
 def listarReclamacoes(conexao):
     consulta = 'select * from Reclamações'

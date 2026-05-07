@@ -1,11 +1,26 @@
-# Legacy file kept for compatibility.
+"""
+Legacy menu interface - DO NOT USE for new code.
+
+This module is kept for backward compatibility only.
+Use menus.menuv2 for the production menu interface.
+"""
 
 import sys
 from pathlib import Path
+
+# Add project root to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from database.operacoesbd import *
-from config.config import *
+# Local imports
+from config.config import HOST, USER, PASSWORD, DATABASE, PORT
+from database.operacoesbd import (
+    criarConexao,
+    encerrarConexao,
+    listarBancoDados,
+    insertNoBancoDados,
+    atualizarBancoDados,
+    excluirBancoDados,
+)
 
 opcao = 1
 conexao = criarConexao(HOST, USER, PASSWORD, DATABASE, PORT)

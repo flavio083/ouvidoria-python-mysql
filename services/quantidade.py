@@ -1,9 +1,14 @@
+"""Script to count and display total number of complaints."""
+
 import sys
 from pathlib import Path
+
+# Add project root to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from database.operacoesbd import *
-from config.config import *
+# Local imports
+from config.config import HOST, USER, PASSWORD, DATABASE, PORT
+from database.operacoesbd import criarConexao, encerrarConexao, listarBancoDados
 
 conexao = criarConexao(HOST, USER, PASSWORD, DATABASE, PORT)
 
