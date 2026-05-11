@@ -1,3 +1,8 @@
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 
@@ -15,7 +20,6 @@ app = Flask(__name__)
 CORS(app)
 
 
-# Routes
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -26,7 +30,6 @@ def admin():
     return render_template("admin.html")
 
 
-# Database helpers
 def get_conexao():
     return criarConexao(HOST, USER, PASSWORD, DATABASE, PORT)
 
@@ -43,7 +46,6 @@ def _validate_complaint_text(text):
 
 
 
-# API Routes
 @app.route("/api/reclamacoes", methods=["GET"])
 def listar_reclamacoes():
     conexao = get_conexao()
