@@ -25,7 +25,11 @@ def run_menu():
         print("6) Mostrar a quantidade total de reclamações cadastradas;")
         print("7) Opção para sair do sistema.")
 
-        opcao = int(input("\nDigite sua opção: "))
+        try:
+            opcao = int(input("\nDigite sua opção: "))
+        except ValueError:
+            print("Entrada inválida. Digite um número.")
+            continue
 
         if opcao == 1:
             listarReclamacoes(conexao)
