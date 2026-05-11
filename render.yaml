@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: flaviano-ouvidoria
+    env: python
+    branch: web
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m web.app
