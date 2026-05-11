@@ -1,8 +1,8 @@
-# 🌐 Ouvidoria Web System
+# 🌐 Ouvidoria System — Web Edition
 
-A complaint management system built with Python, Flask and MySQL.
+A complaint management system built with Python, Flask, and MySQL.
 
-This branch contains the web version of the original CLI project.
+This branch contains the **web version** of the original CLI project, featuring a REST API and browser-based interface.
 
 ---
 
@@ -10,10 +10,12 @@ This branch contains the web version of the original CLI project.
 
 ✅ Register complaints  
 ✅ List complaints  
-✅ Search complaints  
+✅ Search complaints by code  
 ✅ Update complaints  
 ✅ Remove complaints  
+✅ Count total complaints  
 ✅ REST API  
+✅ Input validation  
 ✅ Web interface  
 ✅ Admin dashboard  
 
@@ -21,13 +23,14 @@ This branch contains the web version of the original CLI project.
 
 # 🛠 Technologies
 
-- Python
+- Python 3
 - Flask
 - Flask-CORS
 - MySQL
-- HTML
-- CSS
+- HTML5
+- CSS3
 - JavaScript
+- Git
 
 ---
 
@@ -39,18 +42,54 @@ ouvidoria-python-mysql/
 ├── config/
 ├── database/
 ├── services/
-├── menus/
 │
 └── web/
     ├── app.py
     ├── requirements.txt
     ├── templates/
+    │   ├── index.html
+    │   └── admin.html
     └── static/
 ```
 
 ---
 
-# ⚙️ Installation
+# ⚙️ Configuration
+
+Create:
+
+```bash
+config/config.py
+```
+
+Using:
+
+```python
+HOST = "localhost"
+USER = "your_user"
+PASSWORD = "your_password"
+DATABASE = "your_database"
+PORT = 3306
+```
+
+---
+
+# 🗄 Database Setup
+
+```sql
+CREATE DATABASE ouvidoria;
+
+USE ouvidoria;
+
+CREATE TABLE Reclamações (
+    codigo INT AUTO_INCREMENT PRIMARY KEY,
+    reclamacao TEXT NOT NULL
+);
+```
+
+---
+
+# 🔧 Installation
 
 Clone repository:
 
@@ -58,19 +97,55 @@ Clone repository:
 git clone https://github.com/flavio083/ouvidoria-python-mysql.git
 ```
 
+Enter project folder:
+
+```bash
+cd ouvidoria-python-mysql
+```
+
+Checkout web branch:
+
+```bash
+git checkout web
+```
+
+Create virtual environment:
+
+```bash
+python -m venv .venv
+```
+
+Activate environment:
+
+### Windows
+
+```bash
+source .venv/Scripts/activate
+```
+
+### Linux/macOS
+
+```bash
+source .venv/bin/activate
+```
+
 Install dependencies:
 
 ```bash
-pip install -r web/requirements.txt
+pip install -r requirements.txt
 ```
 
-Run application:
+---
+
+# ▶️ Running
+
+Run Flask application:
 
 ```bash
 python -m web.app
 ```
 
-Open:
+Open in browser:
 
 ```txt
 http://localhost:5000
@@ -80,36 +155,60 @@ http://localhost:5000
 
 # API Endpoints
 
-## List
+## List complaints
 
 ```http
 GET /api/reclamacoes
 ```
 
-## Create
+## Create complaint
 
 ```http
 POST /api/reclamacoes
 ```
 
-## Update
+## Search complaint
 
 ```http
-PUT /api/reclamacoes/<id>
+GET /api/reclamacoes/<codigo>
 ```
 
-## Delete
+## Update complaint
 
 ```http
-DELETE /api/reclamacoes/<id>
+PUT /api/reclamacoes/<codigo>
 ```
+
+## Delete complaint
+
+```http
+DELETE /api/reclamacoes/<codigo>
+```
+
+## Count complaints
+
+```http
+GET /api/reclamacoes/quantidade
+```
+
+---
+
+# 🎯 Learning Outcomes
+
+This project helped me improve in:
+
+- REST API development
+- Flask backend development
+- Frontend integration
+- CORS configuration
+- Database persistence
+- Full-stack architecture
 
 ---
 
 # 👨‍💻 Author
 
-Flaviano Aguiar
+Flaviano Aguiar Silva Filho
 
-📧 flaviano-filho@hotmail.com  
 🐙 GitHub: https://github.com/flavio083  
 💼 LinkedIn: https://www.linkedin.com/in/flaviano-aguiar-173a93343
