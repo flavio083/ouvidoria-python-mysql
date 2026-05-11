@@ -1,33 +1,36 @@
-# 📋 Ouvidoria System
+# 📋 Ouvidoria System — CLI Edition
 
-A modular complaint management system built with Python and MySQL.
+A complaint management system developed with Python and MySQL, designed to simulate an academic ombudsman environment through a command-line interface.
+
+This branch contains the **original CLI version** of the project.
 
 ---
 
 # 🚀 Features
 
 ✅ Register complaints  
-✅ List complaints  
-✅ Search complaints  
-✅ Update complaints  
+✅ List all complaints  
+✅ Search complaints by code  
+✅ Update existing complaints  
 ✅ Remove complaints  
-✅ Count records  
+✅ Count total records  
+✅ Input validation for CLI menus  
 ✅ Modular architecture  
-✅ Secure local configuration  
 
 ---
 
 # 🛠 Technologies
 
-- Python
+- Python 3
 - MySQL
 - Git
+- Virtual Environment (venv)
 
 ---
 
 # 📂 Project Structure
 
-```bash
+```txt
 ouvidoria-python-mysql/
 │
 ├── main.py
@@ -44,16 +47,10 @@ ouvidoria-python-mysql/
 │
 ├── services/
 │   ├── __init__.py
-│   ├── backend.py
-│   ├── adicionar.py
-│   ├── listar.py
-│   ├── pesquisar.py
-│   ├── remover.py
-│   └── substituir.py
+│   └── backend.py
 │
 ├── menus/
 │   ├── __init__.py
-│   ├── menu.py
 │   └── menuv2.py
 ```
 
@@ -85,7 +82,22 @@ config/config_exemplo.py
 
 ---
 
-# ▶️ Running
+# 🗄 Database Setup
+
+```sql
+CREATE DATABASE ouvidoria;
+
+USE ouvidoria;
+
+CREATE TABLE Reclamações (
+    codigo INT AUTO_INCREMENT PRIMARY KEY,
+    reclamacao TEXT NOT NULL
+);
+```
+
+---
+
+# 🔧 Installation
 
 Clone repository:
 
@@ -93,7 +105,43 @@ Clone repository:
 git clone https://github.com/flavio083/ouvidoria-python-mysql.git
 ```
 
-Run:
+Enter project folder:
+
+```bash
+cd ouvidoria-python-mysql
+```
+
+Create virtual environment:
+
+```bash
+python -m venv .venv
+```
+
+Activate environment:
+
+### Windows
+
+```bash
+source .venv/Scripts/activate
+```
+
+### Linux/macOS
+
+```bash
+source .venv/bin/activate
+```
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+# ▶️ Running
+
+Run the CLI application:
 
 ```bash
 python main.py
@@ -107,16 +155,16 @@ This project helped me improve in:
 
 - CRUD operations
 - Python modularization
-- Database integration
+- SQL integration
+- Input validation
+- Error handling
 - Git and GitHub workflow
-- Software organization
 
 ---
 
 # 👨‍💻 Author
 
-Flaviano Aguiar
+Flaviano Aguiar Silva Filho
 
-📧 flaviano-filho@hotmail.com  
 🐙 GitHub: https://github.com/flavio083  
 💼 LinkedIn: https://www.linkedin.com/in/flaviano-aguiar-173a93343
