@@ -3,9 +3,11 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from services.backend import *
-from database.operacoesbd import *
-from config.config import *
+from services.backend import (listarReclamacoes,novaReclamacao,pesquisarReclamacao,substituirReclamacao,removerReclamacao,quantidadeReclamacao,)
+
+from database.operacoesbd import (criarConexao,encerrarConexao,)
+
+from config.config import (HOST,USER,PASSWORD,DATABASE,PORT,)
 
 
 def run_menu():

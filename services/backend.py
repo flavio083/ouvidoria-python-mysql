@@ -14,19 +14,19 @@ def listarReclamacoes(conexao):
 
 
 def novaReclamacao(conexao):
-    novaReclamacao = (input("Insira sua reclamação: "))
+    novaReclamacao = input("Insira sua reclamação: ").strip()
+
+    if len(novaReclamacao) <= 0:
+        print("Deve ser inserido ao menos 1 caractere!")
+        return
 
     consulta = 'insert into Reclamações (reclamacao) values (%s);'
-    reclamacoes = listarBancoDados(conexao, consulta)
+
     dados = [novaReclamacao]
 
-    codigoNovaReclamacao = insertNoBancoDados(conexao, consulta, dados)
+    codigoNovaReclamacao = insertNoBancoDados(conexao,consulta,dados)
 
-    if len(novaReclamacao) > 0:
-        reclamacoes.append(novaReclamacao)
-        print("Reclamação adicionada com sucesso! \nO código é", codigoNovaReclamacao)
-    else:
-        print("Deve ser inserido ao menos 1 caractere!")
+    print("Reclamação adicionada com sucesso! \nO código é",codigoNovaReclamacao)
 
 
 def  pesquisarReclamacao(conexao):
@@ -44,7 +44,7 @@ def  pesquisarReclamacao(conexao):
 
 def substituirReclamacao(conexao):
     codigoNovaReclamacao = int(input("Digite o código da reclamação a ser substituida: "))
-    novaReclamação = input("Digite a nova reclamação: ")
+    novaReclamação = input("Digite a nova reclamação: ").strip()
 
     consulta = 'UPDATE Reclamações SET reclamacao = %s WHERE codigo = %s'
     dados = [novaReclamação, codigoNovaReclamacao]
