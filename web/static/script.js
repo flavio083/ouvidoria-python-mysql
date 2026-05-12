@@ -3,7 +3,7 @@
    Futuristic CRUD Dashboard
    ================================================================ */
 
-const API_BASE = 'http://127.0.0.1:5000/api/reclamacoes';
+const API_BASE = '/api/reclamacoes';
 
 // ---- DOM refs ----
 const tableBody        = document.getElementById('tableBody');
