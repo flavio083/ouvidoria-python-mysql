@@ -1,17 +1,22 @@
 import mysql.connector
 
-# Inicializa a conexão com o banco de dados
-def criarConexao(endereco, usuario, senha, bancodedados, porta):
+
+def criarConexao(host, user, password, database, port):
     try:
-        return mysql.connector.connect(
-            host=endereco,
-            port=porta,
-            user=usuario,
-            password=senha,
-            database=bancodedados
+        conexao = mysql.connector.connect(
+            host=host,
+            user=user,
+            password=password,
+            database=database,
+            port=port,
+            connection_timeout=10
         )
-    except mysql.connector.Error as err:
-        print(f"Erro ao conectar ao banco de dados: {err}")
+
+        print("Banco conectado com sucesso!")
+        return conexao
+
+    except Exception as erro:
+        print(f"ERRO MYSQL REAL: {erro}")
         return None
 
 # Encerra a conexão com o banco de dados
