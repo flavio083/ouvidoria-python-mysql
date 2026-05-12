@@ -174,8 +174,6 @@ Live application:
 
 https://ouvidoria-python-mysql.onrender.com
 
-Hosted on :contentReference[oaicite:1]{index=1}.
-
 ---
 
 # 🔐 Admin Dashboard
