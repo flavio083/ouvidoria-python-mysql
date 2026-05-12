@@ -1,7 +1,7 @@
 import os
 
-HOST = os.getenv("HOST", "localhost")
-USER = os.getenv("USER", "user")
-PASSWORD = os.getenv("PASSWORD", "")
-DATABASE = os.getenv("DATABASE", "database")
-PORT = int(os.getenv("PORT", 3306))
+DB_HOST = os.getenv("HOST", "localhost")
+DB_USER = os.getenv("USER", "user")
+DB_PASSWORD = os.getenv("PASSWORD", "")
+DB_NAME = os.getenv("DATABASE", "database")
+DB_PORT = int(os.getenv("DB_PORT", 3306))

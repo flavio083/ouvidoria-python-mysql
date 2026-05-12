@@ -15,7 +15,13 @@ from database.operacoesbd import (
     atualizarBancoDados,
     excluirBancoDados,
 )
-from config.config import HOST, USER, PASSWORD, DATABASE, PORT
+from config.config import (
+    DB_HOST,
+    DB_USER,
+    DB_PASSWORD,
+    DB_NAME,
+    DB_PORT,
+)
 
 app = Flask(__name__)
 CORS(app)
@@ -32,8 +38,13 @@ def admin():
 
 
 def get_conexao():
-    return criarConexao(HOST, USER, PASSWORD, DATABASE, PORT)
-
+    return criarConexao(
+    DB_HOST,
+    DB_USER,
+    DB_PASSWORD,
+    DB_NAME,
+    DB_PORT
+)
 
 def _serialize_complaint(row):
     return {"codigo": row[0], "reclamacao": row[1]}
@@ -174,5 +185,5 @@ def quantidade_reclamacoes():
 if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
-        port=int(os.environ.get("PORT", 5000))
+        port=int(os.getenv("PORT", 5000))
     )
