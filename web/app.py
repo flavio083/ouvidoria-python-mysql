@@ -1,4 +1,3 @@
-import os
 import sys
 from pathlib import Path
 
@@ -181,6 +180,8 @@ def quantidade_reclamacoes():
     finally:
         encerrarConexao(conexao)
 
+
+import os
 
 if __name__ == "__main__":
     app.run(
