@@ -92,9 +92,9 @@ ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
 # 🗄 Database Setup
 
 ```sql
-CREATE DATABASE ouvidoria;
+CREATE DATABASE ouvidoriabd;
 
-USE ouvidoria;
+USE ouvidoriabd;
 
 CREATE TABLE Reclamações (
     codigo INT AUTO_INCREMENT PRIMARY KEY,
