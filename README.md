@@ -2,7 +2,7 @@
 
 A complaint management system built with Python, Flask, and MySQL.
 
-This branch contains the **web version** of the original CLI project, featuring a REST API and browser-based interface.
+This branch contains the **web version** of the original CLI project, featuring a REST API, browser-based interface, and an authenticated admin dashboard deployed in production.
 
 ---
 
@@ -18,13 +18,16 @@ This branch contains the **web version** of the original CLI project, featuring 
 ✅ Input validation  
 ✅ Web interface  
 ✅ Admin dashboard  
+✅ Basic authentication  
+✅ Environment variables  
+✅ Production deployment  
 
 ---
 
 # 🛠 Technologies
 
 - Python 3
-- Flask
+- :contentReference[oaicite:0]{index=0}
 - Flask-CORS
 - MySQL
 - HTML5
@@ -54,22 +57,34 @@ ouvidoria-python-mysql/
 
 ---
 
-# ⚙️ Configuration
+# ⚙️ Environment Variables
 
-Create:
+Create environment variables:
 
-```bash
-config/config.py
+```env
+DB_HOST=
+DB_USER=
+DB_PASSWORD=
+DB_NAME=
+DB_PORT=
+
+ADMIN_USER=
+ADMIN_PASSWORD=
 ```
 
-Using:
+Example local fallback configuration:
 
 ```python
-HOST = "localhost"
-USER = "your_user"
-PASSWORD = "your_password"
-DATABASE = "your_database"
-PORT = 3306
+import os
+
+DB_HOST = os.getenv("DB_HOST")
+DB_USER = os.getenv("DB_USER")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_NAME = os.getenv("DB_NAME")
+DB_PORT = int(os.getenv("DB_PORT"))
+
+ADMIN_USER = os.getenv("ADMIN_USER")
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
 ```
 
 ---
@@ -153,6 +168,28 @@ http://localhost:5000
 
 ---
 
+# 🌍 Production
+
+Live application:
+
+https://ouvidoria-python-mysql.onrender.com
+
+Hosted on :contentReference[oaicite:1]{index=1}.
+
+---
+
+# 🔐 Admin Dashboard
+
+Protected route:
+
+```txt
+/admin
+```
+
+Authentication uses HTTP Basic Auth with environment variables.
+
+---
+
 # API Endpoints
 
 ## List complaints
@@ -193,6 +230,16 @@ GET /api/reclamacoes/quantidade
 
 ---
 
+# 🔒 Security
+
+✅ Environment variables  
+✅ Prepared statements  
+✅ Restricted CORS  
+✅ Basic authentication  
+✅ Exception protection  
+
+---
+
 # 🎯 Learning Outcomes
 
 This project helped me improve in:
@@ -200,8 +247,10 @@ This project helped me improve in:
 - REST API development
 - Flask backend development
 - Frontend integration
+- Authentication
 - CORS configuration
 - Database persistence
+- Cloud deployment
 - Full-stack architecture
 
 ---
