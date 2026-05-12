@@ -32,15 +32,23 @@ from config.config import (
 )
 
 app = Flask(__name__)
-CORS(app)
+
+app.config["PROPAGATE_EXCEPTIONS"] = False
+
+CORS(
+    app,
+    origins=[
+        "https://ouvidoria-python-mysql.onrender.com"
+    ]
+)
 
 
 # ============================================================
 # AUTH
 # ============================================================
 
-ADMIN_USER = "flaviano083"
-ADMIN_PASSWORD = "futebol06"
+ADMIN_USER = os.getenv("ADMIN_USER")
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
 
 
 def check_auth(username, password):
