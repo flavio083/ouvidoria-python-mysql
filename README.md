@@ -68,8 +68,8 @@ DB_PASSWORD=
 DB_NAME=
 DB_PORT=
 
-ADMIN_USER=
-ADMIN_PASSWORD=
+DB_ADMIN_USER=
+DB_ADMIN_PASSWORD=
 ```
 
 Example local fallback configuration:
@@ -83,8 +83,8 @@ DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_NAME = os.getenv("DB_NAME")
 DB_PORT = int(os.getenv("DB_PORT"))
 
-ADMIN_USER = os.getenv("ADMIN_USER")
-ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
+DB_ADMIN_USER = os.getenv("ADMIN_USER")
+DB_ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
 ```
 
 ---

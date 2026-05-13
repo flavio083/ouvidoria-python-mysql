@@ -23,12 +23,14 @@ from database.operacoesbd import (
     excluirBancoDados,
 )
 
-from config.config import (
+from config.config_exemplo import (
     DB_HOST,
     DB_USER,
     DB_PASSWORD,
     DB_NAME,
     DB_PORT,
+    DB_ADMIN_USER,
+    DB_ADMIN_PASSWORD,
 )
 
 app = Flask(__name__)
@@ -47,14 +49,11 @@ CORS(
 # AUTH
 # ============================================================
 
-ADMIN_USER = os.getenv("ADMIN_USER")
-ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
-
 
 def check_auth(username, password):
     return (
-        username == ADMIN_USER
-        and password == ADMIN_PASSWORD
+        username == DB_ADMIN_USER
+        and password == DB_ADMIN_PASSWORD
     )
 
 
