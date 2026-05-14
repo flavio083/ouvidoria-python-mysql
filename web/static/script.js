@@ -1,6 +1,6 @@
 /* ================================================================
    OUVIDORIA.AI – Frontend Script
-   Futuristic CRUD Dashboard
+   SaaS CRUD Dashboard
    ================================================================ */
 
 const API_BASE = '/api/reclamacoes';
@@ -348,3 +348,31 @@ btnRefresh.addEventListener('click', () => {
 // INIT
 // ================================================================
 carregarReclamacoes();
+
+// ================================================================
+// SIDEBAR (responsive)
+// ================================================================
+(function initSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const toggle  = document.getElementById('sidebarToggle');
+    if (!sidebar || !toggle) return;
+
+    // Create overlay element
+    const overlay = document.createElement('div');
+    overlay.className = 'sidebar-overlay';
+    document.body.appendChild(overlay);
+
+    function openSidebar() {
+        sidebar.classList.add('sidebar--open');
+        overlay.classList.add('sidebar-overlay--visible');
+    }
+    function closeSidebar() {
+        sidebar.classList.remove('sidebar--open');
+        overlay.classList.remove('sidebar-overlay--visible');
+    }
+
+    toggle.addEventListener('click', () => {
+        sidebar.classList.contains('sidebar--open') ? closeSidebar() : openSidebar();
+    });
+    overlay.addEventListener('click', closeSidebar);
+})();
