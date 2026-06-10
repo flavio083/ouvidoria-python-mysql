@@ -5,13 +5,14 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from services.backend import (listarReclamacoes,novaReclamacao,pesquisarReclamacao,substituirReclamacao,removerReclamacao,quantidadeReclamacao,)
 
-from database.operacoesbd import (criarConexao,encerrarConexao,)
+from database.operacoesbd import (criarConexao)
 
 from config.config import (HOST,USER,PASSWORD,DATABASE,PORT,)
 
 
-def run_menu():
-    conexao = criarConexao(HOST, USER, PASSWORD, DATABASE, PORT)
+def run_menu(conexao=None):
+    if conexao is None:
+        conexao = criarConexao(HOST, USER, PASSWORD, DATABASE, PORT)
 
     print("Olá, tudo bem?")
     print("Venho aqui desejar as boas vindas á Ouvidoria Unifacisa!")
@@ -54,7 +55,6 @@ def run_menu():
         elif opcao != 7:
             print("Opção inválida")
 
-    encerrarConexao(conexao)
     print("Foi um prazer ter você aqui hoje! \nOuvidoria Unifacisa agradece.")
 
 
