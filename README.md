@@ -1,12 +1,14 @@
-# 📋 Ouvidoria System — CLI Edition
+# 📋 Gestão.AI — CLI Edition
 
-A complaint management system developed with Python and MySQL, designed to simulate an academic ombudsman environment through a command-line interface.
+A management platform developed with Python and MySQL, designed to simulate a corporate management environment through a command-line interface.
 
-This branch contains the **original CLI version** of the project.
+This branch contains the **CLI version** of the project, featuring two integrated modules: **Ouvidoria (Complaints)** and **Estoque (Stock Management)**.
 
 ---
 
 # 🚀 Features
+
+## Ouvidoria (Complaints)
 
 ✅ Register complaints  
 ✅ List all complaints  
@@ -14,8 +16,23 @@ This branch contains the **original CLI version** of the project.
 ✅ Update existing complaints  
 ✅ Remove complaints  
 ✅ Count total records  
-✅ Input validation for CLI menus  
+
+## Estoque (Stock Management)
+
+✅ Register products (name, category, quantity, price, supplier)  
+✅ List all products  
+✅ Search products by ID  
+✅ Update product quantity  
+✅ Update product price  
+✅ Remove products  
+✅ Low stock alert (configurable threshold)  
+✅ Stock summary (total products, items, and value)  
+
+## Platform
+
+✅ Input validation for all menus  
 ✅ Modular architecture  
+✅ Centralized database connection  
 
 ---
 
@@ -31,27 +48,30 @@ This branch contains the **original CLI version** of the project.
 # 📂 Project Structure
 
 ```txt
-ouvidoria-python-mysql/
+gestao-ai/
 │
-├── main.py
+├── main.py                          # Main menu (Ouvidoria + Estoque)
 ├── README.md
 ├── LICENSE
 │
 ├── config/
 │   ├── __init__.py
-│   └── config_exemplo.py
+│   ├── config.py                    # Local config (gitignored)
+│   └── config_exemplo.py           # Config template
 │
 ├── database/
 │   ├── __init__.py
-│   └── operacoesbd.py
+│   └── operacoesbd.py              # Database operations (CRUD)
 │
 ├── services/
 │   ├── __init__.py
-│   └── backend.py
+│   ├── backend.py                   # Complaint operations
+│   └── backend_estoque.py          # Stock operations
 │
 ├── menus/
 │   ├── __init__.py
-│   └── menuv2.py
+│   ├── menuv2.py                    # Complaint CLI menu
+│   └── menu_estoque.py             # Stock CLI menu
 ```
 
 ---
@@ -85,13 +105,22 @@ config/config_exemplo.py
 # 🗄 Database Setup
 
 ```sql
-CREATE DATABASE ouvidoria;
+CREATE DATABASE ouvidoriabd;
 
-USE ouvidoria;
+USE ouvidoriabd;
 
 CREATE TABLE Reclamações (
     codigo INT AUTO_INCREMENT PRIMARY KEY,
     reclamacao TEXT NOT NULL
+);
+
+CREATE TABLE Produtos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    categoria VARCHAR(100) NOT NULL,
+    quantidade INT NOT NULL DEFAULT 0,
+    preco DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    fornecedor VARCHAR(255) NOT NULL
 );
 ```
 
@@ -147,6 +176,15 @@ Run the CLI application:
 python main.py
 ```
 
+You will see a main menu:
+
+```
+=== MENU PRINCIPAL ===
+1) Ouvidoria;
+2) Estoque;
+3) Sair.
+```
+
 ---
 
 # 🎯 Learning Outcomes
@@ -158,6 +196,7 @@ This project helped me improve in:
 - SQL integration
 - Input validation
 - Error handling
+- Multi-module architecture
 - Git and GitHub workflow
 
 ---
