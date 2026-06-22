@@ -1,39 +1,38 @@
-"""
-Production menu interface for Ouvidoria System.
-
-This is the main command-line menu that users interact with.
-"""
-
 import sys
 from pathlib import Path
 
-# Add project root to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-# Local imports
-from config.config import HOST, USER, PASSWORD, DATABASE, PORT
-from database.operacoesbd import criarConexao, encerrarConexao
-from services.backend import (
-    listarReclamacoes,
-    novaReclamacao,
-    pesquisarReclamacao,
-    substituirReclamacao,
-    removerReclamacao,
-    quantidadeReclamacao,
-)
+from services.backend import (listarReclamacoes,novaReclamacao,pesquisarReclamacao,substituirReclamacao,removerReclamacao,quantidadeReclamacao,)
+
+from database.operacoesbd import (criarConexao)
+
+from config.config import (HOST,USER,PASSWORD,DATABASE,PORT,)
 
 
-def run_menu():
-    """Run the main menu loop for the Ouvidoria system."""
-    opcao = 1
-    conexao = criarConexao(HOST, USER, PASSWORD, DATABASE, PORT)
+def run_menu(conexao=None):
+    if conexao is None:
+        conexao = criarConexao(HOST, USER, PASSWORD, DATABASE, PORT)
 
-    print("Olá, tudo bem?\nVenho aqui desejar as boas vindas á Ouvidoria Unifacisa!")
+    print("Olá, tudo bem?")
+    print("Venho aqui desejar as boas vindas á Ouvidoria Unifacisa!")
+
+    opcao = 0
 
     while opcao != 7:
-        print('''\n1) Listar Reclamações;\n2) Registrar uma nova reclamação;\n3) Pesquisar uma reclamação pelo código;\n4) Atualizar uma reclamação existente;\n5) Remover uma reclamação pelo código;\n6) Mostrar a quantidade total de reclamações cadastradas;\n7) Opção para sair do sistema.
-''')
-        opcao = int(input("Digite sua opção: "))
+        print("\n1) Listar Reclamações;")
+        print("2) Registrar uma nova reclamação;")
+        print("3) Pesquisar uma reclamação pelo código;")
+        print("4) Atualizar uma reclamação existente;")
+        print("5) Remover uma reclamação pelo código;")
+        print("6) Mostrar a quantidade total de reclamações cadastradas;")
+        print("7) Opção para sair do sistema.")
+
+        try:
+            opcao = int(input("\nDigite sua opção: "))
+        except ValueError:
+            print("Entrada inválida. Digite um número.")
+            continue
 
         if opcao == 1:
             listarReclamacoes(conexao)
@@ -54,12 +53,10 @@ def run_menu():
             quantidadeReclamacao(conexao)
 
         elif opcao != 7:
-            print("Opção Inválida")
+            print("Opção inválida")
 
-    encerrarConexao(conexao)
     print("Foi um prazer ter você aqui hoje! \nOuvidoria Unifacisa agradece.")
 
 
 if __name__ == "__main__":
     run_menu()
-
