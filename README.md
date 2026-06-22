@@ -1,24 +1,38 @@
-# 🌐 Ouvidoria System — Web Edition
+# 🌐 Gestão.AI — Web Edition
 
-A complaint management system built with Python, Flask, and MySQL.
+A management platform built with Python, Flask, and MySQL — featuring a **Complaint system (Ouvidoria)** and a **Stock management module (Estoque)**.
 
-This branch contains the **web version** of the original CLI project, featuring a REST API, browser-based interface, and an authenticated admin dashboard deployed in production.
+This branch contains the **web version** of the project, with REST API, browser-based interface, and authenticated admin dashboards deployed in production.
 
 ---
 
 # 🚀 Features
 
+## Ouvidoria (Complaints)
+
 ✅ Register complaints  
-✅ List complaints  
+✅ List all complaints  
 ✅ Search complaints by code  
 ✅ Update complaints  
 ✅ Remove complaints  
 ✅ Count total complaints  
+
+## Estoque (Stock Management)
+
+✅ Register products (name, category, quantity, price, supplier)  
+✅ List all products  
+✅ Search products by ID  
+✅ Update products (full edit)  
+✅ Remove products  
+✅ Stock summary (total products, total items, total value)  
+✅ Low stock alert system  
+
+## Platform
+
 ✅ REST API  
 ✅ Input validation  
-✅ Web interface  
-✅ Admin dashboard  
-✅ Basic authentication  
+✅ Responsive web interface  
+✅ Admin dashboard with authentication  
 ✅ Environment variables  
 ✅ Production deployment  
 
@@ -27,7 +41,7 @@ This branch contains the **web version** of the original CLI project, featuring 
 # 🛠 Technologies
 
 - Python 3
-- :contentReference[oaicite:0]{index=0}
+- Flask
 - Flask-CORS
 - MySQL
 - HTML5
@@ -40,19 +54,38 @@ This branch contains the **web version** of the original CLI project, featuring 
 # 📂 Project Structure
 
 ```txt
-ouvidoria-python-mysql/
+gestao-ai/
 │
+├── main.py                          # CLI entry point (main menu)
 ├── config/
+│   ├── config.py                    # Local config (gitignored)
+│   └── config_exemplo.py           # Config template
+│
 ├── database/
+│   └── operacoesbd.py              # Database operations
+│
 ├── services/
+│   ├── backend.py                   # Complaint backend (CLI)
+│   └── backend_estoque.py          # Stock backend (CLI)
+│
+├── menus/
+│   ├── menuv2.py                    # Complaint CLI menu
+│   └── menu_estoque.py             # Stock CLI menu
 │
 └── web/
-    ├── app.py
+    ├── app.py                       # Flask app + REST API
     ├── requirements.txt
     ├── templates/
-    │   ├── index.html
-    │   └── admin.html
+    │   ├── index.html               # Complaint dashboard
+    │   ├── admin.html               # Complaint admin panel
+    │   ├── estoque.html             # Stock dashboard
+    │   └── admin_estoque.html       # Stock admin panel
     └── static/
+        ├── styles.css
+        ├── script.js                # Complaint dashboard JS
+        ├── script_admin.js          # Complaint admin JS
+        ├── script_estoque.js        # Stock dashboard JS
+        └── script_admin_estoque.js  # Stock admin JS
 ```
 
 ---
@@ -62,29 +95,14 @@ ouvidoria-python-mysql/
 Create environment variables:
 
 ```env
-DB_HOST=
-DB_USER=
-DB_PASSWORD=
-DB_NAME=
-DB_PORT=
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=your_password
+DB_NAME=ouvidoriabd
+DB_PORT=3306
 
-DB_ADMIN_USER=
-DB_ADMIN_PASSWORD=
-```
-
-Example local fallback configuration:
-
-```python
-import os
-
-DB_HOST = os.getenv("DB_HOST")
-DB_USER = os.getenv("DB_USER")
-DB_PASSWORD = os.getenv("DB_PASSWORD")
-DB_NAME = os.getenv("DB_NAME")
-DB_PORT = int(os.getenv("DB_PORT"))
-
-DB_ADMIN_USER = os.getenv("DB_ADMIN_USER")
-DB_ADMIN_PASSWORD = os.getenv("DB_ADMIN_PASSWORD")
+DB_ADMIN_USER=your_admin_user
+DB_ADMIN_PASSWORD=your_admin_password
 ```
 
 ---
@@ -99,6 +117,15 @@ USE ouvidoriabd;
 CREATE TABLE Reclamações (
     codigo INT AUTO_INCREMENT PRIMARY KEY,
     reclamacao TEXT NOT NULL
+);
+
+CREATE TABLE Produtos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    categoria VARCHAR(100) NOT NULL,
+    quantidade INT NOT NULL DEFAULT 0,
+    preco DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    fornecedor VARCHAR(255) NOT NULL
 );
 ```
 
@@ -154,7 +181,7 @@ pip install -r requirements.txt
 
 # ▶️ Running
 
-Run Flask application:
+## Web Application (Flask)
 
 ```bash
 python -m web.app
@@ -166,6 +193,50 @@ Open in browser:
 http://localhost:5000
 ```
 
+## CLI Application
+
+```bash
+python main.py
+```
+
+---
+
+# 🌐 Web Pages
+
+| Route | Description | Auth |
+|-------|-------------|------|
+| `/` | Complaint dashboard (Ouvidoria) | ❌ |
+| `/estoque` | Stock dashboard (Estoque) | ❌ |
+| `/admin` | Complaint admin panel | ✅ Basic Auth |
+| `/admin/estoque` | Stock admin panel | ✅ Basic Auth |
+
+---
+
+# 📡 API Endpoints
+
+## Complaints (`/api/reclamacoes`)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/reclamacoes` | List all complaints |
+| `POST` | `/api/reclamacoes` | Create a complaint |
+| `GET` | `/api/reclamacoes/<codigo>` | Search complaint by code |
+| `PUT` | `/api/reclamacoes/<codigo>` | Update a complaint |
+| `DELETE` | `/api/reclamacoes/<codigo>` | Delete a complaint |
+| `GET` | `/api/reclamacoes/quantidade` | Count total complaints |
+
+## Products (`/api/produtos`)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/produtos` | List all products |
+| `POST` | `/api/produtos` | Create a product |
+| `GET` | `/api/produtos/<id>` | Search product by ID |
+| `PUT` | `/api/produtos/<id>` | Update a product |
+| `DELETE` | `/api/produtos/<id>` | Delete a product |
+| `GET` | `/api/produtos/resumo` | Stock summary (totals + value) |
+| `GET` | `/api/produtos/alerta?limite=5` | Products with low stock |
+
 ---
 
 # 🌍 Production
@@ -176,55 +247,16 @@ https://ouvidoria-python-mysql.onrender.com
 
 ---
 
-# 🔐 Admin Dashboard
+# 🔐 Admin Dashboards
 
-Protected route:
+Protected routes:
 
 ```txt
-/admin
+/admin          → Complaint management
+/admin/estoque  → Stock management
 ```
 
 Authentication uses HTTP Basic Auth with environment variables.
-
----
-
-# API Endpoints
-
-## List complaints
-
-```http
-GET /api/reclamacoes
-```
-
-## Create complaint
-
-```http
-POST /api/reclamacoes
-```
-
-## Search complaint
-
-```http
-GET /api/reclamacoes/<codigo>
-```
-
-## Update complaint
-
-```http
-PUT /api/reclamacoes/<codigo>
-```
-
-## Delete complaint
-
-```http
-DELETE /api/reclamacoes/<codigo>
-```
-
-## Count complaints
-
-```http
-GET /api/reclamacoes/quantidade
-```
 
 ---
 
@@ -250,6 +282,7 @@ This project helped me improve in:
 - Database persistence
 - Cloud deployment
 - Full-stack architecture
+- Modular project design
 
 ---
 
